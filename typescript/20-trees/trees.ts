@@ -14,16 +14,6 @@ export class TreeNode {
   }
 }
 
-export const exampleTree = new TreeNode(1);
-const nodeLeft: TreeNode = exampleTree.addChild(2);
-const nodeRight: TreeNode = exampleTree.addChild(3);
-nodeLeft.addChild(4);
-nodeLeft.addChild(5);
-nodeLeft.addChild(6).addChild(6)
-nodeLeft.addChild(7);
-nodeRight.addChild(8)
-nodeRight.addChild(9)
-
 export function bfs(root: TreeNode): number[] {
   if (!root) return [];
 
@@ -43,13 +33,32 @@ export function bfs(root: TreeNode): number[] {
 }
 
 
-export function preorderDFS(node: TreeNode | null, result: number[] = []): number[] {
+export function preorderDFS(node: TreeNode, result: number[] = []): number[] {
   if (!node) return result;
 
   result.push(node.value);
 
   for (const child of node.children) {
     preorderDFS(child, result);
+  }
+
+  return result;
+}
+
+
+export function iterativeDFS(root: TreeNode): number[] {
+  if (!root) return [];
+
+  const result: number[] = [];
+  const stack: TreeNode[] = [root];
+
+  while (stack.length > 0) {
+    const node = stack.pop()!;
+    result.push(node.value);
+
+    for (let i = node.children.length - 1; i >= 0; i--) {
+      stack.push(node.children[i]);
+    }
   }
 
   return result;
