@@ -1,5 +1,6 @@
 import { describe, it, expect } from '@jest/globals'
-import { _Node, maxDepth } from "./max-depth.js"
+import { maxDepth } from "./max-depth.js"
+import { _Node } from "./trees.js"
 
 describe('Maximum Depth of N-ary Tree', () => {
   it('first test case', () => {

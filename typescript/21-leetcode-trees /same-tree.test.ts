@@ -1,5 +1,6 @@
 import { describe, it, expect } from '@jest/globals'
-import { isSameTree, TreeNode } from "./same-tree.js";
+import { isSameTree } from "./same-tree.js"
+import { TreeNode} from "./trees.js"
 
 describe('Same tree', () => {
   it('same trees', () => {
