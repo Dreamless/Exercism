@@ -3,7 +3,7 @@ import { TreeNode } from "./trees.ts";
 export function inorderTraversal(root: TreeNode | null): number[] {
   const result: number[] = [];
 
-  function dfs(node: TreeNode | null) {
+  function dfs(node: TreeNode | null): void {
     if (!node) return;
 
     dfs(node.left);
