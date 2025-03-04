@@ -1,4 +1,4 @@
-import {Node} from "./trees.js"
+import { Node } from "./trees.js"
 
 export function construct(grid: number[][]): Node {
   function buildTree(row: number, col: number, size: number): Node {
