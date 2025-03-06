@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@jest/globals'
-import { hasPathSum } from "./examples.js"
+import { validateBST, hasPathSum } from "./examples.js"
 import { TreeNode } from "./trees.ts"
 
 describe('hasPathSum', () => {
@@ -40,5 +40,18 @@ describe('hasPathSum', () => {
   it('test for null tree', () => {
     const root = null
     expect(hasPathSum(root, 1)).toBe(false)
+  })
+})
+
+
+describe('validate BST', () => {
+  it("valid BST", () => {
+    const root = new TreeNode(2, new TreeNode(1), new TreeNode(3))
+    expect(validateBST(root)).toBe(true)
+  })
+
+  it("invalid BST", () => {
+    const root = new TreeNode(5, new TreeNode(1), new TreeNode(4, new TreeNode(3), new TreeNode(6)));
+    expect(validateBST(root)).toBe(false)
   })
 })
