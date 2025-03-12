@@ -1,5 +1,5 @@
 import {describe, it, expect} from '@jest/globals'
-import {construct} from "./quad-tree.js"
+import {construct, constructBottomUp} from "./quad-tree.js"
 import {Node} from "./trees.js"
 
 describe('Quad tree', () => {
@@ -15,6 +15,7 @@ describe('Quad tree', () => {
     )
 
     expect(construct(grid)).toEqual(expected)
+    expect(constructBottomUp(grid)).toEqual(expected)
   })
 
   it('complex grid', () => {
@@ -45,6 +46,7 @@ describe('Quad tree', () => {
     )
 
     expect(construct(grid)).toEqual(expected)
+    expect(constructBottomUp(grid)).toEqual(expected)
   })
 
   it('uniform grid of 1', () => {
@@ -59,6 +61,7 @@ describe('Quad tree', () => {
     const expected: Node = new Node(false, true)
 
     expect(construct(grid)).toEqual(expected)
+    expect(constructBottomUp(grid)).toEqual(expected)
   })
 
   it('mixed values', () => {
@@ -78,5 +81,6 @@ describe('Quad tree', () => {
     )
 
     expect(construct(grid)).toEqual(expected)
+    expect(constructBottomUp(grid)).toEqual(expected)
   })
 })
