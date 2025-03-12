@@ -1,5 +1,16 @@
 import {Node} from "./trees.js"
 
+function makeNode(topLeft: Node, topRight: Node, bottomLeft: Node, bottomRight: Node): Node {
+  const isAllLeaf: boolean = topLeft.isLeaf && topRight.isLeaf && bottomLeft.isLeaf && bottomRight.isLeaf;
+  const isAllSame: boolean = topLeft.val === topRight.val && topLeft.val === bottomLeft.val && topLeft.val === bottomRight.val;
+
+  if (isAllLeaf && isAllSame) {
+    return new Node(topLeft.val, true)
+  } else {
+    return new Node(true, false, topLeft, topRight, bottomLeft, bottomRight);
+  }
+}
+
 export function construct(grid: number[][]): Node {
   function buildTree(row: number, col: number, size: number): Node {
     const val = Boolean(grid[row][col]);
@@ -14,21 +25,14 @@ export function construct(grid: number[][]): Node {
     const bottomLeft: Node = buildTree(row + mid, col, mid);
     const bottomRight: Node = buildTree(row + mid, col + mid, mid);
 
-    const isAllLeaf: boolean = topLeft.isLeaf && topRight.isLeaf && bottomLeft.isLeaf && bottomRight.isLeaf;
-    const isAllSame: boolean = topLeft.val === topRight.val && topLeft.val === bottomLeft.val && topLeft.val === bottomRight.val;
-
-    if (isAllLeaf && isAllSame) {
-      return new Node(val, true);
-    }
-
-    return new Node(true, false, topLeft, topRight, bottomLeft, bottomRight);
+    return makeNode(topLeft, topRight, bottomLeft, bottomRight)
   }
 
   return buildTree(0, 0, grid.length);
 }
 
 export function constructBottomUp(grid: number[][]): Node {
-  const size: number = grid.length;
+  let size: number = grid.length;
   const nodes: Node[][] = [];
 
   for (let i = 0; i < size; i++) {
@@ -39,9 +43,8 @@ export function constructBottomUp(grid: number[][]): Node {
     nodes.push(row)
   }
 
-  let fullSize = size;
-  while (fullSize > 1) {
-    const newSize = fullSize / 2;
+  while (size > 1) {
+    const newSize = size / 2;
     for (let row = 0; row < newSize; row++) {
       for (let col = 0; col < newSize; col++) {
         const topLeft: Node = nodes[row * 2][col * 2];
@@ -49,18 +52,11 @@ export function constructBottomUp(grid: number[][]): Node {
         const bottomLeft: Node = nodes[row * 2 + 1][col * 2];
         const bottomRight: Node = nodes[row * 2 + 1][col * 2 + 1];
 
-        const isAllLeaf: boolean = topLeft.isLeaf && topRight.isLeaf && bottomLeft.isLeaf && bottomRight.isLeaf;
-        const isAllSame: boolean = topLeft.val === topRight.val && topLeft.val === bottomLeft.val && topLeft.val === bottomRight.val;
-
-        if (isAllLeaf && isAllSame) {
-          nodes[row][col] = new Node(topLeft.val, true)
-        } else {
-          nodes[row][col] = new Node(true, false, topLeft, topRight, bottomLeft, bottomRight);
-        }
+        nodes[row][col] = makeNode(topLeft, topRight, bottomLeft, bottomRight)
       }
     }
 
-    fullSize = newSize;
+    size = newSize;
   }
 
   return nodes[0][0];
