@@ -35,18 +35,46 @@ export function validateBST(root: TreeNode | null): boolean {
 export function findTilt(root: TreeNode | null): number {
   let tilt = 0;
 
-  const dfs = (node: TreeNode | null): number => {
-    if (node === null) {
-      return 0;
-    }
+  function dfs(node: TreeNode | null): number {
+    if (!node) return 0;
 
     const left = dfs(node.left);
     const right = dfs(node.right);
 
-    return 0;
-  };
+    tilt += Math.abs(left - right);
+
+    return left + right + node.val;
+  }
+
+  dfs(root);
+  return tilt;
+}
+
+export function longestUnivaluePath(root: TreeNode | null): number {
+  let maxLength = 0;
+
+  function dfs(node: TreeNode | null): number {
+    if (!node) return 0;
+
+    const leftLength = dfs(node.left);
+    const rightLength = dfs(node.right);
+
+    let leftArrow = 0, rightArrow = 0;
+
+    if (node.left && node.left.val === node.val) {
+      leftArrow = leftLength + 1;
+    }
+
+    if (node.right && node.right.val === node.val) {
+      rightArrow = rightLength + 1;
+    }
+
+    maxLength = Math.max(maxLength, leftArrow + rightArrow);
+
+    return Math.max(leftArrow, rightArrow);
+  }
 
   dfs(root);
 
-  return tilt;
+  return maxLength;
 }
