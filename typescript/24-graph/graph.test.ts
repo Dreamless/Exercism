@@ -1,6 +1,6 @@
 import {describe, expect, it} from "@jest/globals"
 import {graphBFS, graphDFS, recursiveGraphDFS} from "./graph.js"
-import {hasPath} from "./graphTasks.js"
+import {hasPath, undirectedPath, connectedComponentsCount} from "./graphTasks.js"
 
 describe('Graph traversal', () => {
   it('test graph traversal', () => {
@@ -22,11 +22,6 @@ describe('Graph traversal', () => {
     expect(graphBFS(graphData, 'a')).toEqual(expected3)
   })
 
-  /* Write a function, hasPath, that takes in an object representing the adjacency list
-   of a directed acyclic graph and two nodes (src, dst).
-   The function should return a boolean indicating whether or not there exists
-   a directed path between the source and destination nodes. */
-
   it('has path task', () => {
     const graphData = {
       f: ['g', 'i'],
@@ -37,7 +32,34 @@ describe('Graph traversal', () => {
       k: [],
     }
 
-    expect(hasPath(graphData, 'f', 'k')).toBeTruthy()
-    expect(hasPath(graphData, 'g', 'k')).toBeFalsy()
+    expect(hasPath(graphData, 'f', 'k', new Set())).toBeTruthy()
+    expect(hasPath(graphData, 'g', 'k', new Set())).toBeFalsy()
+  })
+
+  it('undirected path', () => {
+    const edges = [
+      ['i', 'j'],
+      ['k', 'i'],
+      ['m', 'k'],
+      ['k', 'l'],
+      ['o', 'n']
+    ]
+
+    expect(undirectedPath(edges, 'j', 'm')).toBeTruthy()
+    expect(undirectedPath(edges, 'i', 'o')).toBeFalsy()
+  })
+
+  it('connectedComponentsCount', () => {
+    const graph1 = {
+      0: [8, 1, 5],
+      1: [0],
+      5: [0, 8],
+      8: [0, 5],
+      2: [3, 4],
+      3: [2, 4],
+      4: [3, 2]
+    }
+
+    expect(connectedComponentsCount(graph1)).toEqual(2)
   })
 })
