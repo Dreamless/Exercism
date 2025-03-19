@@ -1,6 +1,16 @@
 import {describe, expect, it} from "@jest/globals"
 import {graphBFS, graphDFS, recursiveGraphDFS} from "./graph.js"
-import {hasPath, undirectedPath, connectedComponentsCount} from "./graphTasks.js"
+import {hasPath, undirectedPath, connectedComponentsCount, largestComponent} from "./graphTasks.js"
+
+const numGraph = {
+  0: [8, 1, 5],
+  1: [0],
+  2: [3, 4],
+  3: [2, 4],
+  4: [3, 2],
+  5: [0, 8],
+  8: [0, 5]
+}
 
 describe('Graph traversal', () => {
   it('test graph traversal', () => {
@@ -49,17 +59,11 @@ describe('Graph traversal', () => {
     expect(undirectedPath(edges, 'i', 'o')).toBeFalsy()
   })
 
-  it('connectedComponentsCount', () => {
-    const graph1 = {
-      0: [8, 1, 5],
-      1: [0],
-      2: [3, 4],
-      3: [2, 4],
-      4: [3, 2],
-      5: [0, 8],
-      8: [0, 5]
-    }
+  it('connected components count', () => {
+    expect(connectedComponentsCount(numGraph)).toEqual(2)
+  })
 
-    expect(connectedComponentsCount(graph1)).toEqual(2)
+  it('largest component', () => {
+    expect(largestComponent(numGraph)).toEqual(4)
   })
 })
