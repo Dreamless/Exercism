@@ -53,11 +53,11 @@ describe('Graph traversal', () => {
     const graph1 = {
       0: [8, 1, 5],
       1: [0],
-      5: [0, 8],
-      8: [0, 5],
       2: [3, 4],
       3: [2, 4],
-      4: [3, 2]
+      4: [3, 2],
+      5: [0, 8],
+      8: [0, 5]
     }
 
     expect(connectedComponentsCount(graph1)).toEqual(2)
