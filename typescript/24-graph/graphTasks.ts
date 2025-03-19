@@ -32,7 +32,7 @@ export function hasPath(graph: Graph, src: string, dst: string, visited: Set<str
 */
 
 export function undirectedPath(edges: EdgeList, nodeA: string, nodeB: string): boolean {
-  const graph = buildGraph(edges);
+  const graph: Graph = buildGraph(edges);
   return hasPath(graph, nodeA, nodeB, new Set());
 }
 
@@ -76,4 +76,28 @@ export function connectedComponentsCount(graph: NumberGraph): number {
   }
 
   return count;
+}
+
+function exploreSize(graph: NumberGraph, node: string, visited: Set<string>): number {
+  if (visited.has(node)) return 0;
+  visited.add(node);
+
+  let size = 1;
+  for (const neighbor of graph[node]) {
+    size += exploreSize(graph, String(neighbor), visited)
+  }
+
+  return size;
+}
+
+export function largestComponent(graph: NumberGraph): number {
+  let longest = 0;
+  const visited = new Set<string>();
+
+  for (const node in graph) {
+    const size: number = exploreSize(graph, String(node), visited);
+    if (size > longest) longest = size;
+  }
+
+  return longest;
 }
