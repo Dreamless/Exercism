@@ -1,6 +1,6 @@
 import {describe, expect, it} from "@jest/globals"
 import {graphBFS, graphDFS, recursiveGraphDFS} from "./graph.js"
-import {hasPath, undirectedPath, connectedComponentsCount, largestComponent} from "./graphTasks.js"
+import {hasPath, undirectedPath, connectedComponentsCount, largestComponent, shortestPath} from "./graphTasks.js"
 
 const numGraph = {
   0: [8, 1, 5],
@@ -65,5 +65,16 @@ describe('Graph traversal', () => {
 
   it('largest component', () => {
     expect(largestComponent(numGraph)).toEqual(4)
+  })
+
+  it('shortest path', () => {
+    const edges = [
+      ['w', 'x'],
+      ['x', 'y'],
+      ['z', 'y'],
+      ['z', 'v'],
+      ['w', 'v']
+    ]
+    expect(shortestPath(edges, 'w', 'z')).toEqual(2)
   })
 })

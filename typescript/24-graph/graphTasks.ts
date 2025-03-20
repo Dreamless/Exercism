@@ -1,6 +1,7 @@
 type Graph = Record<string, string[]>
 type EdgeList = string[][];
 type NumberGraph = Record<string, number[]>;
+type QueueItem = [string, number];
 
 /*
   Write a function, hasPath, that takes in an object representing the adjacency list
@@ -100,4 +101,25 @@ export function largestComponent(graph: NumberGraph): number {
   }
 
   return longest;
+}
+
+export function shortestPath(edges: EdgeList, nodeA: string, nodeB: string): number {
+  const graph: Graph = buildGraph(edges);
+  const visited = new Set<string>([nodeA]);
+  const queue: [string, number][] = [[nodeA, 0]];
+
+  while (queue.length > 0) {
+    const [node, distance] = queue.shift()!;
+
+    if (node === nodeB) return distance;
+
+    for (const neighbor of graph[node]) {
+      if (!visited.has(neighbor)) {
+        visited.add(neighbor);
+        queue.push([neighbor, distance + 1]);
+      }
+    }
+  }
+
+  return -1;
 }
