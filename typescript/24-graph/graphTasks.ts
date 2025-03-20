@@ -1,8 +1,6 @@
 type Graph = Record<string, string[]>
 type EdgeList = string[][];
 type NumberGraph = Record<string, number[]>;
-type QueueItem = [string, number];
-
 /*
   Write a function, hasPath, that takes in an object representing the adjacency list
   of a directed acyclic graph and two nodes (src, dst).
