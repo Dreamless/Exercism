@@ -1,5 +1,5 @@
 type Graph = Record<string, string[]>
-type EdgeList = string[][];
+type Grid = string[][];
 type NumberGraph = Record<string, number[]>;
 /*
   Write a function, hasPath, that takes in an object representing the adjacency list
@@ -30,12 +30,12 @@ export function hasPath(graph: Graph, src: string, dst: string, visited: Set<str
   there exists a path between nodeA and nodeB.
 */
 
-export function undirectedPath(edges: EdgeList, nodeA: string, nodeB: string): boolean {
+export function undirectedPath(edges: Grid, nodeA: string, nodeB: string): boolean {
   const graph: Graph = buildGraph(edges);
   return hasPath(graph, nodeA, nodeB, new Set());
 }
 
-function buildGraph(edges: EdgeList): Graph {
+function buildGraph(edges: Grid): Graph {
   const graph: Graph = {};
 
   for (const [a, b] of edges) {
@@ -101,7 +101,7 @@ export function largestComponent(graph: NumberGraph): number {
   return longest;
 }
 
-export function shortestPath(edges: EdgeList, nodeA: string, nodeB: string): number {
+export function shortestPath(edges: Grid, nodeA: string, nodeB: string): number {
   const graph: Graph = buildGraph(edges);
   const visited = new Set<string>([nodeA]);
   const queue: [string, number][] = [[nodeA, 0]];
@@ -120,4 +120,38 @@ export function shortestPath(edges: EdgeList, nodeA: string, nodeB: string): num
   }
 
   return -1;
+}
+
+export function islandCount(grid: Grid): number {
+  let count = 0;
+  const visited = new Set<string>();
+  for (let row = 0; row < grid.length; row++) {
+    for (let col = 0; col < grid[0].length; col++) {
+      if (exploreIsland(grid, row, col, visited)) {
+        count++;
+      }
+    }
+  }
+
+  return count;
+}
+
+function exploreIsland(grid: Grid, row: number, col: number, visited: Set<string>): boolean {
+  const rowBounds: boolean = 0 < row && row < grid.length;
+  const colBounds: boolean = 0 < col && col < grid[0].length;
+
+  if (!rowBounds || !colBounds) return false;
+  if (grid[row][col] === "W") return false;
+
+  const position = `${row}, ${col}`
+
+  if (visited.has(position)) return false;
+  visited.add(position);
+
+  exploreIsland(grid, row - 1, col, visited);
+  exploreIsland(grid, row + 1, col, visited);
+  exploreIsland(grid, row, col - 1, visited);
+  exploreIsland(grid, row, col + 1, visited);
+
+  return true;
 }

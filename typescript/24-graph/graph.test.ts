@@ -1,6 +1,13 @@
 import {describe, expect, it} from "@jest/globals"
 import {graphBFS, graphDFS, recursiveGraphDFS} from "./graph.js"
-import {hasPath, undirectedPath, connectedComponentsCount, largestComponent, shortestPath} from "./graphTasks.js"
+import {
+  hasPath,
+  undirectedPath,
+  connectedComponentsCount,
+  largestComponent,
+  shortestPath,
+  islandCount
+} from "./graphTasks.js"
 
 const numGraph = {
   0: [8, 1, 5],
@@ -68,7 +75,7 @@ describe('Graph traversal', () => {
   })
 
   it('shortest path', () => {
-    const edges = [
+    const edges: string[][] = [
       ['w', 'x'],
       ['x', 'y'],
       ['z', 'y'],
@@ -76,5 +83,17 @@ describe('Graph traversal', () => {
       ['w', 'v']
     ]
     expect(shortestPath(edges, 'w', 'z')).toEqual(2)
+  })
+
+  it('island count', () => {
+    const grid: string[][] = [
+      ['W', 'L','W','W','W'],
+      ['W', 'L','W','W','W'],
+      ['W', 'W','W','W','W'],
+      ['W', 'W','W','L','L'],
+      ['L', 'W','W','L','L'],
+      ['L', 'L','W','W','W'],
+    ]
+    expect(islandCount(grid)).toEqual(3)
   })
 })
