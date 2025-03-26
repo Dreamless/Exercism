@@ -6,7 +6,8 @@ import {
   connectedComponentsCount,
   largestComponent,
   shortestPath,
-  islandCount
+  islandCount,
+  minimumIsland
 } from "./graphTasks.js"
 
 const numGraph = {
@@ -85,7 +86,7 @@ describe('Graph traversal', () => {
     expect(shortestPath(edges, 'w', 'z')).toEqual(2)
   })
 
-  it('island count', () => {
+  it('island traversal', () => {
     const grid: string[][] = [
       ['W', 'L','W','W','W'],
       ['W', 'L','W','W','W'],
@@ -94,6 +95,8 @@ describe('Graph traversal', () => {
       ['L', 'W','W','L','L'],
       ['L', 'L','W','W','W'],
     ]
+
     expect(islandCount(grid)).toEqual(3)
+    expect(minimumIsland(grid)).toEqual(2)
   })
 })
