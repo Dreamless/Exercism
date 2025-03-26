@@ -1,6 +1,7 @@
 type Graph = Record<string, string[]>
 type Grid = string[][];
 type NumberGraph = Record<string, number[]>;
+
 /*
   Write a function, hasPath, that takes in an object representing the adjacency list
   of a directed acyclic graph and two nodes (src, dst).
@@ -123,35 +124,46 @@ export function shortestPath(edges: Grid, nodeA: string, nodeB: string): number 
 }
 
 export function islandCount(grid: Grid): number {
-  let count = 0;
+  return islandTraversal(grid).length;
+}
+
+export function minimumIsland(grid: Grid): number {
+  return Math.min(...islandTraversal(grid));
+}
+
+function islandTraversal(grid: Grid): number[] {
   const visited = new Set<string>();
+  const islands: number[] = [];
+
   for (let row = 0; row < grid.length; row++) {
     for (let col = 0; col < grid[0].length; col++) {
-      if (exploreIsland(grid, row, col, visited)) {
-        count++;
+      const size = exploreIsland(grid, row, col, visited);
+      if (size > 0) {
+        islands.push(size)
       }
     }
   }
 
-  return count;
+  return islands;
 }
 
-function exploreIsland(grid: Grid, row: number, col: number, visited: Set<string>): boolean {
-  const rowBounds: boolean = 0 < row && row < grid.length;
-  const colBounds: boolean = 0 < col && col < grid[0].length;
+function exploreIsland(grid: Grid, row: number, col: number, visited: Set<string>): number {
+  const rowBounds: boolean = 0 <= row && row < grid.length;
+  const colBounds: boolean = 0 <= col && col < grid[0].length;
 
-  if (!rowBounds || !colBounds) return false;
-  if (grid[row][col] === "W") return false;
+  if (!rowBounds || !colBounds) return 0;
+  if (grid[row][col] === "W") return 0;
 
-  const position = `${row}, ${col}`
-
-  if (visited.has(position)) return false;
+  const position = `${row},${col}`;
+  if (visited.has(position)) return 0;
   visited.add(position);
 
-  exploreIsland(grid, row - 1, col, visited);
-  exploreIsland(grid, row + 1, col, visited);
-  exploreIsland(grid, row, col - 1, visited);
-  exploreIsland(grid, row, col + 1, visited);
+  let size = 1;
 
-  return true;
+  size += exploreIsland(grid, row - 1, col, visited);
+  size += exploreIsland(grid, row + 1, col, visited);
+  size += exploreIsland(grid, row, col - 1, visited);
+  size += exploreIsland(grid, row, col + 1, visited);
+
+  return size;
 }
