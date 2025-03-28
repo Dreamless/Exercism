@@ -7,8 +7,10 @@ import {
   largestComponent,
   shortestPath,
   islandCount,
-  minimumIsland
+  minimumIsland,
 } from "./graphTasks.js"
+
+import { copyGraph, Node } from "./copyGraph.js"
 
 const numGraph = {
   0: [8, 1, 5],
@@ -88,15 +90,50 @@ describe('Graph traversal', () => {
 
   it('island traversal', () => {
     const grid: string[][] = [
-      ['W', 'L','W','W','W'],
-      ['W', 'L','W','W','W'],
-      ['W', 'W','W','W','W'],
-      ['W', 'W','W','L','L'],
-      ['L', 'W','W','L','L'],
-      ['L', 'L','W','W','W'],
+      ['W', 'L', 'W', 'W', 'W'],
+      ['W', 'L', 'W', 'W', 'W'],
+      ['W', 'W', 'W', 'W', 'W'],
+      ['W', 'W', 'W', 'L', 'L'],
+      ['L', 'W', 'W', 'L', 'L'],
+      ['L', 'L', 'W', 'W', 'W'],
     ]
 
     expect(islandCount(grid)).toEqual(3)
     expect(minimumIsland(grid)).toEqual(2)
+  })
+
+  it('copyGraph simple connected graph', () => {
+    const node1 = new Node(1)
+    const node2 = new Node(2)
+    const node3 = new Node(3)
+
+    node1.neighbors = [node2, node3]
+    node2.neighbors = [node1]
+    node3.neighbors = [node1]
+
+    expect(copyGraph(node1)).toEqual({
+      1: [2, 3],
+      2: [1],
+      3: [1]
+    })
+  })
+
+  it('copyGraph with a cycle in the graph', () => {
+    const nodeA = new Node(1)
+    const nodeB = new Node(2)
+    const nodeC = new Node(3)
+    const nodeD = new Node(4)
+
+    nodeA.neighbors = [nodeB, nodeD]
+    nodeB.neighbors = [nodeA, nodeC]
+    nodeC.neighbors = [nodeB, nodeD]
+    nodeD.neighbors = [nodeA, nodeC]
+
+    expect(copyGraph(nodeA)).toEqual({
+      1: [2, 4],
+      2: [1, 3],
+      3: [2, 4],
+      4: [1, 3]
+    })
   })
 })
