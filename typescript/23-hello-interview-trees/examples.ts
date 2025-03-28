@@ -1,5 +1,11 @@
 import { TreeNode } from "./trees.ts";
 
+/*
+  Given the root of a binary tree and an integer target,
+  write a recursive function to determine if the tree has
+  a root-to-leaf path where all the values along that path sum to the target.
+*/
+
 export function hasPathSum(root: TreeNode | null, target: number): boolean {
   if (!root) {
     return false;
@@ -14,6 +20,10 @@ export function hasPathSum(root: TreeNode | null, target: number): boolean {
   return left || right;
 }
 
+/*
+  Given the root of a binary, write a recursive function
+  to determine if it is a valid binary search tree.
+*/
 
 export function validateBST(root: TreeNode | null): boolean {
   const dfs = (node: TreeNode | null, min: number, max: number): boolean => {
@@ -31,6 +41,13 @@ export function validateBST(root: TreeNode | null): boolean {
   return dfs(root, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY);
 }
 
+/*
+  Given the root node of a binary tree, write a recursive function
+  to return the sum of each node's tilt.
+  The tilt of a node is the absolute difference between the sum of its left
+  subtree and the sum of its right subtree. If a node has an empty left or subtree,
+  the sum of the empty subtree is 0.
+ */
 
 export function findTilt(root: TreeNode | null): number {
   let tilt = 0;
@@ -49,6 +66,12 @@ export function findTilt(root: TreeNode | null): number {
   dfs(root);
   return tilt;
 }
+
+/*
+  Given the root of the binary tree, find the longest path where all nodes
+  along the path have the same value. This path doesn't have to include the root node.
+  Return the number of edges on that path, not the number of nodes.
+*/
 
 export function longestUnivaluePath(root: TreeNode | null): number {
   let maxLength = 0;
