@@ -1,6 +1,6 @@
-type Graph = Record<string, string[]>
+type GraphPlayground = Record<string, string[]>
 
-export function graphDFS(graph: Graph, source: string): string[] {
+export function graphDFS(graph: GraphPlayground, source: string): string[] {
   const stack: string[] = [source];
   const result: string[] = [];
 
@@ -15,20 +15,20 @@ export function graphDFS(graph: Graph, source: string): string[] {
   return result;
 }
 
-export function recursiveGraphDFS(graph: Graph, source: string): string[] {
+export function recursiveGraphDFS(graph: GraphPlayground, source: string): string[] {
   const result: string[] = [];
   traversal(graph, source, result);
   return result;
 }
 
-function traversal(graph: Graph, s: string, result: string[]): void {
+function traversal(graph: GraphPlayground, s: string, result: string[]): void {
   result.push(s);
   for (const neighbor of graph[s]) {
     traversal(graph, neighbor, result);
   }
 }
 
-export function graphBFS(graph: Graph, source: string): string[] {
+export function graphBFS(graph: GraphPlayground, source: string): string[] {
   const queue: string[] = [source];
   const result: string[] = [];
   while (queue.length > 0) {
