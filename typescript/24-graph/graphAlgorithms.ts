@@ -78,17 +78,10 @@ export function connectedComponentsCount(graph: NumberGraph): number {
   return count;
 }
 
-function exploreSize(graph: NumberGraph, node: string, visited: Set<string>): number {
-  if (visited.has(node)) return 0;
-  visited.add(node);
-
-  let size = 1;
-  for (const neighbor of graph[node]) {
-    size += exploreSize(graph, String(neighbor), visited)
-  }
-
-  return size;
-}
+/*
+  Write a function, largestComponent, that takes in the adjacency list of an undirected graph.
+  The function should return the size of the largest connected component in the graph.
+*/
 
 export function largestComponent(graph: NumberGraph): number {
   let longest = 0;
@@ -101,6 +94,26 @@ export function largestComponent(graph: NumberGraph): number {
 
   return longest;
 }
+
+function exploreSize(graph: NumberGraph, node: string, visited: Set<string>): number {
+  if (visited.has(node)) return 0;
+  visited.add(node);
+
+  let size = 1;
+  for (const neighbor of graph[node]) {
+    size += exploreSize(graph, String(neighbor), visited)
+  }
+
+  return size;
+}
+
+/*
+  Write a function, shortestPath, that takes in an array of edges
+  for an undirected graph and two nodes (nodeA, nodeB).
+  The function should return the length of the shortest path between A and B.
+  Consider the length as the number of edges in the path, not the number of nodes.
+  If there is no path between A and B, then return -1.
+*/
 
 export function shortestPath(edges: Grid, nodeA: string, nodeB: string): number {
   const graph: Graph = buildGraph(edges);
@@ -123,9 +136,23 @@ export function shortestPath(edges: Grid, nodeA: string, nodeB: string): number 
   return -1;
 }
 
+/*
+  Write a function, islandCount, that takes in a grid containing Ws and Ls.
+  W represents water and L represents land. The function should return the
+  number of islands on the grid. An island is a vertically or horizontally
+  connected region of land.
+*/
+
 export function islandCount(grid: Grid): number {
   return islandTraversal(grid).length;
 }
+
+/*
+  Write a function, minimumIsland, that takes in a grid containing Ws and Ls.
+  W represents water and L represents land. The function should return the size
+  of the smallest island. An island is a vertically or horizontally connected
+  region of land. You may assume that the grid contains at least one island.
+*/
 
 export function minimumIsland(grid: Grid): number {
   return Math.min(...islandTraversal(grid));

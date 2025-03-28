@@ -1,5 +1,5 @@
 import {describe, expect, it} from "@jest/globals"
-import {graphBFS, graphDFS, recursiveGraphDFS} from "./graph.js"
+import {graphBFS, graphDFS, recursiveGraphDFS} from "./graphPlayground.js"
 import {
   hasPath,
   undirectedPath,
@@ -8,7 +8,7 @@ import {
   shortestPath,
   islandCount,
   minimumIsland,
-} from "./graphTasks.js"
+} from "./graphAlgorithms.js"
 
 import { copyGraph, Node } from "./copyGraph.js"
 
