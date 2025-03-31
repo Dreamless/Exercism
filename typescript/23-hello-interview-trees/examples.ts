@@ -15,8 +15,10 @@ export function hasPathSum(root: TreeNode | null, target: number): boolean {
     return target === root.val;
   }
 
-  const left = hasPathSum(root.left, target - root.val);
-  const right = hasPathSum(root.right, target - root.val);
+  const sum = target - root.val;
+
+  const left = hasPathSum(root.left, sum);
+  const right = hasPathSum(root.right, sum);
   return left || right;
 }
 
@@ -26,7 +28,7 @@ export function hasPathSum(root: TreeNode | null, target: number): boolean {
 */
 
 export function validateBST(root: TreeNode | null): boolean {
-  const dfs = (node: TreeNode | null, min: number, max: number): boolean => {
+  const explore = (node: TreeNode | null, min: number, max: number): boolean => {
     if (node === null) {
       return true;
     }
@@ -35,10 +37,10 @@ export function validateBST(root: TreeNode | null): boolean {
       return false;
     }
 
-    return dfs(node.left, min, node.val) && dfs(node.right, node.val, max);
+    return explore(node.left, min, node.val) && explore(node.right, node.val, max);
   };
 
-  return dfs(root, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY);
+  return explore(root, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY);
 }
 
 /*
@@ -52,18 +54,18 @@ export function validateBST(root: TreeNode | null): boolean {
 export function findTilt(root: TreeNode | null): number {
   let tilt = 0;
 
-  function dfs(node: TreeNode | null): number {
+  function explore(node: TreeNode | null): number {
     if (!node) return 0;
 
-    const left = dfs(node.left);
-    const right = dfs(node.right);
+    const left = explore(node.left);
+    const right = explore(node.right);
 
     tilt += Math.abs(left - right);
 
-    return left + right + node.val;
+    return left + right + node.val; // Return the sum of the subtree values and the current node
   }
 
-  dfs(root);
+  explore(root);
   return tilt;
 }
 
@@ -76,28 +78,28 @@ export function findTilt(root: TreeNode | null): number {
 export function longestUnivaluePath(root: TreeNode | null): number {
   let maxLength = 0;
 
-  function dfs(node: TreeNode | null): number {
+  function explore(node: TreeNode | null): number {
     if (!node) return 0;
 
-    const leftLength = dfs(node.left);
-    const rightLength = dfs(node.right);
+    const leftLength = explore(node.left);
+    const rightLength = explore(node.right);
 
-    let leftArrow = 0, rightArrow = 0;
+    let leftPathLength = 0, rightPathLength = 0;
 
     if (node.left && node.left.val === node.val) {
-      leftArrow = leftLength + 1;
+      leftPathLength = leftLength + 1;
     }
 
     if (node.right && node.right.val === node.val) {
-      rightArrow = rightLength + 1;
+      rightPathLength = rightLength + 1;
     }
 
-    maxLength = Math.max(maxLength, leftArrow + rightArrow);
+    maxLength = Math.max(maxLength, leftPathLength + rightPathLength);
 
-    return Math.max(leftArrow, rightArrow);
+    return Math.max(leftPathLength, rightPathLength);
   }
 
-  dfs(root);
+  explore(root);
 
   return maxLength;
 }
