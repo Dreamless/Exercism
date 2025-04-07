@@ -1,5 +1,5 @@
-import { describe, it, expect } from '@jest/globals'
-import {bfs, iterativeDFS, TreeNode } from "./trees.js"
+import {describe, it, expect} from '@jest/globals'
+import {bfs, iterativeDFS, TreeNode} from "./trees.js"
 
 const exampleTree = new TreeNode(1)
 const nodeLeft: TreeNode = exampleTree.addChild(2)
@@ -25,22 +25,22 @@ const expectedTree = {
   children: [
     {
       children: [
-        { children: [], value: 4 },
-        { children: [], value: 5 },
+        {children: [], value: 4},
+        {children: [], value: 5},
         {
           children: [
-            { children: [], value: 6 }
+            {children: [], value: 6}
           ],
           value: 6
         },
-        { children: [], value: 7 }
+        {children: [], value: 7}
       ],
       value: 2
     },
     {
       children: [
-        { children: [], value: 8 },
-        { children: [], value: 9 }
+        {children: [], value: 8},
+        {children: [], value: 9}
       ],
       value: 3
     }
@@ -54,17 +54,17 @@ describe('Trees', () => {
   })
 
   it('bfs', () => {
-    const expected: number[] = [1,2,3,4,5,6,7,8,9,6]
+    const expected: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 6]
     expect(bfs(exampleTree)).toEqual(expected)
   })
 
   it('bfs linked list', () => {
-    const expected: number[] = [1,2,3,4]
+    const expected: number[] = [1, 2, 3, 4]
     expect(bfs(linkedList)).toEqual(expected)
   })
 
   it('dfs', () => {
-    const expected: number[] = [1,2,3,4,5,6,7,8,9,6]
+    const expected: number[] = [1, 2, 4, 5, 3, 6]
     expect(iterativeDFS(exampleTree2)).toEqual(expected)
   })
 
