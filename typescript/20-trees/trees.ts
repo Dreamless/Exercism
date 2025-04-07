@@ -18,13 +18,14 @@ export function bfs(root: TreeNode): number[] {
   if (!root) return [];
 
   const result: number[] = [];
-  const queue: TreeNode[] = [root];
+  let queue: TreeNode[] = [root];
 
   while (queue.length > 0) {
-    const node = queue.shift()!;
-    result.push(node.value);
+    const currentLevel: TreeNode[] = queue;
+    queue = [];
 
-    if (node.children.length > 0) {
+    for (const node of currentLevel) {
+      result.push(node.value);
       queue.push(...node.children);
     }
   }
