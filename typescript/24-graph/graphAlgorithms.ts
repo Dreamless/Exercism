@@ -194,3 +194,37 @@ function exploreIsland(grid: Grid, row: number, col: number, visited: Set<string
 
   return size;
 }
+
+/*
+  Given a m x n integer grid image and integers sr, sc, and newColor,
+  write a function to perform a flood fill on the image starting from the pixel image[sr][sc].
+  In a 'flood fill', start by changing the color of image[sr][sc] to newColor.
+  Then, change the color of all pixels connected to image[sr][sc] from either
+  the top, bottom, left or right that have the same color as image[sr][sc],
+  along with all the connected pixels of those pixels, and so on.
+*/
+
+export function floodFill(image: number[][], sr: number, sc: number, color: number): number[][] {
+  const rows: number = image.length;
+  const cols: number = image[0].length;
+  const originalColor: number = image[sr][sc];
+
+  if (originalColor === color) {
+    return image;
+  }
+
+  function explore(r: number, c: number): void {
+    if (image[r][c] === originalColor) {
+      image[r][c] = color;
+    }
+
+      if (r >= 1) explore(r - 1, c);
+      if (r + 1 < rows) explore(r + 1, c);
+      if (c >= 1) explore(r, c - 1);
+      if (c + 1 < cols) explore(r, c + 1);
+  }
+
+  explore(sr, sc);
+
+  return image;
+}

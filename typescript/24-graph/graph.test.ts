@@ -7,7 +7,7 @@ import {
   largestComponent,
   shortestPath,
   islandCount,
-  minimumIsland,
+  minimumIsland, floodFill,
 } from "./graphAlgorithms.js"
 
 import { copyGraph, Node } from "./copyGraph.js"
@@ -135,5 +135,45 @@ describe('Graph traversal', () => {
       3: [2, 4],
       4: [1, 3]
     })
+  })
+})
+
+describe('floodFill', () => {
+  it('should fill the connected region with the new color', () => {
+    const image = [
+      [1, 1, 1],
+      [1, 1, 0],
+      [1, 0, 1],
+    ]
+    const sr = 1
+    const sc = 1
+    const color = 2
+
+    const result = floodFill(image, sr, sc, color)
+
+    expect(result).toEqual([
+      [2, 2, 2],
+      [2, 2, 0],
+      [2, 0, 1],
+    ])
+  })
+
+  it('should be the same as the original color', () => {
+    const image = [
+      [1, 1, 1],
+      [1, 1, 0],
+      [1, 0, 1],
+    ]
+    const sr = 1
+    const sc = 1
+    const color = 1
+
+    const result = floodFill(image, sr, sc, color)
+
+    expect(result).toEqual([
+      [1, 1, 1],
+      [1, 1, 0],
+      [1, 0, 1],
+    ])
   })
 })
