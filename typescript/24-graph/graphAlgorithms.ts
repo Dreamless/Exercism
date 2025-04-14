@@ -86,25 +86,30 @@ export function connectedComponentsCount(graph: NumberGraph): number {
 export function largestComponent(graph: NumberGraph): number {
   let longest = 0;
   const visited = new Set<string>();
+  let prevSize = 0
 
   for (const node in graph) {
-    const size: number = exploreSize(graph, String(node), visited);
-    if (size > longest) longest = size;
+    if (exploreSize(graph, String(node), visited)) {
+      const islandSize = visited.size - prevSize;
+      prevSize = visited.size;
+
+      if (islandSize > longest) longest = islandSize;
+    }
+
   }
 
   return longest;
 }
 
-function exploreSize(graph: NumberGraph, node: string, visited: Set<string>): number {
-  if (visited.has(node)) return 0;
+function exploreSize(graph: NumberGraph, node: string, visited: Set<string>): boolean {
+  if (visited.has(node)) return false;
   visited.add(node);
 
-  let size = 1;
   for (const neighbor of graph[node]) {
-    size += exploreSize(graph, String(neighbor), visited)
+   exploreSize(graph, String(neighbor), visited)
   }
 
-  return size;
+  return true;
 }
 
 /*
@@ -182,15 +187,15 @@ function islandTraversal(grid: Grid): number[] {
   return islands;
 }
 
-function exploreIsland(grid: Grid, row: number, col: number, visited: Set<string>): number {
+function exploreIsland(grid: Grid, row: number, col: number, visited: Set<string>): boolean {
   const rowBounds: boolean = 0 <= row && row < grid.length;
   const colBounds: boolean = 0 <= col && col < grid[0].length;
 
-  if (!rowBounds || !colBounds) return 0;
-  if (grid[row][col] === "W") return 0;
+  if (!rowBounds || !colBounds) return false;
+  if (grid[row][col] === "W") return false;
 
   const position = `${row},${col}`;
-  if (visited.has(position)) return 0;
+  if (visited.has(position)) return false;
   visited.add(position);
 
   exploreIsland(grid, row - 1, col, visited);
@@ -198,7 +203,7 @@ function exploreIsland(grid: Grid, row: number, col: number, visited: Set<string
   exploreIsland(grid, row, col - 1, visited);
   exploreIsland(grid, row, col + 1, visited);
 
-  return 1;
+  return true;
 }
 
 /*
