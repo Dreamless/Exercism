@@ -12,16 +12,6 @@ import {
 
 import { copyGraph, Node } from "./copyGraph.js"
 
-const numGraph = {
-  0: [8, 1, 5],
-  1: [0],
-  2: [3, 4],
-  3: [2, 4],
-  4: [3, 2],
-  5: [0, 8],
-  8: [0, 5]
-}
-
 describe('Graph traversal', () => {
   it('test graph traversal', () => {
     const graphData = {
@@ -41,7 +31,9 @@ describe('Graph traversal', () => {
     expect(recursiveGraphDFS(graphData, 'a')).toEqual(expected2)
     expect(graphBFS(graphData, 'a')).toEqual(expected3)
   })
+})
 
+describe('Has Path task', () => {
   it('has path task', () => {
     const graphData = {
       f: ['g', 'i'],
@@ -55,7 +47,9 @@ describe('Graph traversal', () => {
     expect(hasPath(graphData, 'f', 'k', new Set())).toBeTruthy()
     expect(hasPath(graphData, 'g', 'k', new Set())).toBeFalsy()
   })
+})
 
+describe('Undirected path task', () => {
   it('undirected path', () => {
     const edges = [
       ['i', 'j'],
@@ -68,6 +62,18 @@ describe('Graph traversal', () => {
     expect(undirectedPath(edges, 'j', 'm')).toBeTruthy()
     expect(undirectedPath(edges, 'i', 'o')).toBeFalsy()
   })
+})
+
+describe('Connected graph and largest component task', () => {
+  const numGraph = {
+    0: [8, 1, 5],
+    1: [0],
+    2: [3, 4],
+    3: [2, 4],
+    4: [3, 2],
+    5: [0, 8],
+    8: [0, 5]
+  }
 
   it('connected components count', () => {
     expect(connectedComponentsCount(numGraph)).toEqual(2)
@@ -76,7 +82,9 @@ describe('Graph traversal', () => {
   it('largest component', () => {
     expect(largestComponent(numGraph)).toEqual(4)
   })
+})
 
+describe('Shortest path task', () => {
   it('shortest path', () => {
     const edges: string[][] = [
       ['w', 'x'],
@@ -88,6 +96,28 @@ describe('Graph traversal', () => {
     expect(shortestPath(edges, 'w', 'z')).toEqual(2)
   })
 
+  it('linear path', () => {
+    const edges: string[][] = [
+      ['a', 'b'],
+      ['b', 'c'],
+      ['c', 'd'],
+      ['d', 'e']
+    ]
+    expect(shortestPath(edges, 'a', 'e')).toEqual(4)
+  })
+
+  it('circular graph', () => {
+    const edges: string[][] = [
+      ['a', 'b'],
+      ['b', 'c'],
+      ['c', 'd'],
+      ['d', 'a']
+    ]
+    expect(shortestPath(edges, 'a', 'c')).toEqual(2)
+  })
+})
+
+describe('Island traversal task', () => {
   it('island traversal', () => {
     const grid: string[][] = [
       ['W', 'L', 'W', 'W', 'W'],
@@ -102,6 +132,22 @@ describe('Graph traversal', () => {
     expect(minimumIsland(grid)).toEqual(2)
   })
 
+  it('island traversal 2', () => {
+    const grid: string[][] = [
+      ['W', 'L', 'L', 'W', 'W'],
+      ['W', 'L', 'L', 'W', 'W'],
+      ['W', 'W', 'W', 'W', 'W'],
+      ['W', 'W', 'W', 'W', 'W'],
+      ['L', 'W', 'W', 'L', 'L'],
+      ['L', 'L', 'W', 'W', 'W'],
+    ]
+
+    expect(islandCount(grid)).toEqual(3)
+    expect(minimumIsland(grid)).toEqual(2)
+  })
+})
+
+describe('CopyGraph task', () => {
   it('copyGraph simple connected graph', () => {
     const node1 = new Node(1)
     const node2 = new Node(2)
@@ -138,7 +184,7 @@ describe('Graph traversal', () => {
   })
 })
 
-describe('floodFill', () => {
+describe('floodFill task', () => {
   it('should fill the connected region with the new color', () => {
     const image = [
       [1, 1, 1],
@@ -170,10 +216,6 @@ describe('floodFill', () => {
 
     const result = floodFill(image, sr, sc, color)
 
-    expect(result).toEqual([
-      [1, 1, 1],
-      [1, 1, 0],
-      [1, 0, 1],
-    ])
+    expect(result).toEqual(image)
   })
 })

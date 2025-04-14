@@ -118,19 +118,25 @@ function exploreSize(graph: NumberGraph, node: string, visited: Set<string>): nu
 export function shortestPath(edges: Grid, nodeA: string, nodeB: string): number {
   const graph: Graph = buildGraph(edges);
   const visited = new Set<string>([nodeA]);
-  const queue: [string, number][] = [[nodeA, 0]];
+  let currentLevel: string[] = [nodeA];
+  let distance = 0;
 
-  while (queue.length > 0) {
-    const [node, distance] = queue.shift()!;
+  while (currentLevel.length > 0) {
+    const nextLevel: string[] = []
 
-    if (node === nodeB) return distance;
+    for (const node of currentLevel) {
+      if (node === nodeB) return distance;
 
-    for (const neighbor of graph[node]) {
-      if (!visited.has(neighbor)) {
-        visited.add(neighbor);
-        queue.push([neighbor, distance + 1]);
+      for (const neighbor of graph[node]) {
+        if (!visited.has(neighbor)) {
+          visited.add(neighbor);
+          nextLevel.push(neighbor);
+        }
       }
     }
+
+    distance++;
+    currentLevel = nextLevel;
   }
 
   return -1;
@@ -161,12 +167,14 @@ export function minimumIsland(grid: Grid): number {
 function islandTraversal(grid: Grid): number[] {
   const visited = new Set<string>();
   const islands: number[] = [];
+  let prevSize = 0
 
   for (let row = 0; row < grid.length; row++) {
     for (let col = 0; col < grid[0].length; col++) {
-      const size = exploreIsland(grid, row, col, visited);
-      if (size > 0) {
-        islands.push(size)
+      if (exploreIsland(grid, row, col, visited)) {
+        const islandSize = visited.size - prevSize;
+        prevSize = visited.size;
+        islands.push(islandSize);
       }
     }
   }
@@ -185,14 +193,12 @@ function exploreIsland(grid: Grid, row: number, col: number, visited: Set<string
   if (visited.has(position)) return 0;
   visited.add(position);
 
-  let size = 1;
+  exploreIsland(grid, row - 1, col, visited);
+  exploreIsland(grid, row + 1, col, visited);
+  exploreIsland(grid, row, col - 1, visited);
+  exploreIsland(grid, row, col + 1, visited);
 
-  size += exploreIsland(grid, row - 1, col, visited);
-  size += exploreIsland(grid, row + 1, col, visited);
-  size += exploreIsland(grid, row, col - 1, visited);
-  size += exploreIsland(grid, row, col + 1, visited);
-
-  return size;
+  return 1;
 }
 
 /*
@@ -216,12 +222,11 @@ export function floodFill(image: number[][], sr: number, sc: number, color: numb
   function explore(r: number, c: number): void {
     if (image[r][c] === originalColor) {
       image[r][c] = color;
-    }
-
       if (r >= 1) explore(r - 1, c);
       if (r + 1 < rows) explore(r + 1, c);
       if (c >= 1) explore(r, c - 1);
       if (c + 1 < cols) explore(r, c + 1);
+    }
   }
 
   explore(sr, sc);
