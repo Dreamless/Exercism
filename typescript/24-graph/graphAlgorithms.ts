@@ -60,17 +60,8 @@ export function connectedComponentsCount(graph: NumberGraph): number {
   const visited = new Set<string>();
   let count = 0;
 
-  function explore(node: string): void {
-    if (visited.has(node)) return;
-    visited.add(node);
-    for (const neighbor of graph[node] || []) {
-      explore(neighbor.toString());
-    }
-  }
-
   for (const node in graph) {
-    if (!visited.has(node)) {
-      explore(node);
+    if (explore(graph, node, visited)) {
       count++;
     }
   }
@@ -89,7 +80,7 @@ export function largestComponent(graph: NumberGraph): number {
   let prevSize = 0
 
   for (const node in graph) {
-    if (exploreSize(graph, String(node), visited)) {
+    if (explore(graph, node, visited)) {
       const islandSize = visited.size - prevSize;
       prevSize = visited.size;
 
@@ -101,12 +92,12 @@ export function largestComponent(graph: NumberGraph): number {
   return longest;
 }
 
-function exploreSize(graph: NumberGraph, node: string, visited: Set<string>): boolean {
+function explore(graph: NumberGraph, node: string, visited: Set<string>): boolean {
   if (visited.has(node)) return false;
   visited.add(node);
 
   for (const neighbor of graph[node]) {
-   exploreSize(graph, String(neighbor), visited)
+   explore(graph, String(neighbor), visited)
   }
 
   return true;
@@ -224,17 +215,17 @@ export function floodFill(image: number[][], sr: number, sc: number, color: numb
     return image;
   }
 
-  function explore(r: number, c: number): void {
+  function exploreImage(r: number, c: number): void {
     if (image[r][c] === originalColor) {
       image[r][c] = color;
-      if (r >= 1) explore(r - 1, c);
-      if (r + 1 < rows) explore(r + 1, c);
-      if (c >= 1) explore(r, c - 1);
-      if (c + 1 < cols) explore(r, c + 1);
+      if (r >= 1) exploreImage(r - 1, c);
+      if (r + 1 < rows) exploreImage(r + 1, c);
+      if (c >= 1) exploreImage(r, c - 1);
+      if (c + 1 < cols) exploreImage(r, c + 1);
     }
   }
 
-  explore(sr, sc);
+  exploreImage(sr, sc);
 
   return image;
 }
