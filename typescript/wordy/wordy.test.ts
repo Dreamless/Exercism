@@ -58,6 +58,10 @@ describe('Wordy', () => {
     expect(answer('What is -3 plus 7 multiplied by -2?')).toEqual(-8)
   })
 
+  it('addition and multiplication and subtraction', () => {
+    expect(answer('What is -3 plus 7 multiplied by -2 minus 13 multiplied by 2?')).toEqual(-8)
+  })
+
   it('multiple division', () => {
     expect(answer('What is -12 divided by 2 divided by -3?')).toEqual(2)
   })

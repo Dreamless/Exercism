@@ -1,17 +1,60 @@
 type Token = { type: 'OPERAND' | 'OPERATOR' | 'UNKNOWN'; value: string };
+
 class Node {
   operator: string;
-  leftOperand: Node | number| null;
+  leftOperand: Node | number | null;
   rightOperand: Node | number | null;
 
-  constructor(operator: string, leftOperand: Node | null, rightOperand: Node | null) {
+  constructor(operator: string, leftOperand: Node | number | null, rightOperand: Node | number | null) {
     this.operator = operator;
     this.leftOperand = leftOperand;
     this.rightOperand = rightOperand;
   }
 }
 
-type AstNode = Node | number| null
+function buildAST(tokens: Token[]): Node | number {
+  const priority: Record<string, number> = {
+    'plus': 1,
+    'minus': 1,
+    'multiplied': 2,
+    'divided': 2
+  };
+
+  const output: (Token | number)[] = [];
+  const operators: Token[] = [];
+
+  for (const token of tokens) {
+    if (token.type === 'OPERAND') {
+      output.push(Number(token.value));
+    } else if (token.type === 'OPERATOR') {
+      while (
+        operators.length > 0 &&
+        priority[operators[operators.length - 1].value] >= priority[token.value]
+        ) {
+        output.push(operators.pop()!);
+      }
+      operators.push(token);
+    }
+  }
+
+  while (operators.length > 0) {
+    output.push(operators.pop()!);
+  }
+
+  const tree: (Node | number)[] = [];
+
+  for (const item of output) {
+    if (typeof item === 'number') {
+      tree.push(item);
+    } else if (item.type === 'OPERATOR') {
+      const right = tree.pop()!;
+      const left = tree.pop()!;
+      tree.push(new Node(item.value, left, right));
+    }
+  }
+
+  return tree[0];
+}
 
 export const lexer = (question: string): Token[] => {
   const sanitizedQuestion = question
@@ -37,13 +80,12 @@ export const lexer = (question: string): Token[] => {
   return tokens;
 };
 
-const parser(tokens: Token[]): Node {
-
-}
 
 export const answer = (question: string): number => {
 
   const tokens: Token[] = lexer(question);
+  const ast = buildAST(tokens)
+  console.log(ast);
 
   if (tokens.length === 0) throw new Error("Syntax error");
 
