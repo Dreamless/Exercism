@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@jest/globals'
-import { answer } from './wordy.ts'
+import { answer, answerAlgebraicallyCorrect } from './wordy.ts'
 
 describe('Wordy', () => {
   it('just a number', () => {
@@ -59,7 +59,7 @@ describe('Wordy', () => {
   })
 
   it('addition and multiplication and subtraction', () => {
-    expect(answer('What is -3 plus 7 multiplied by -2 minus 13 multiplied by 2?')).toEqual(-8)
+    expect(answer('What is -3 plus 7 multiplied by -2?')).toEqual(-8)
   })
 
   it('multiple division', () => {
@@ -104,5 +104,15 @@ describe('Wordy', () => {
 
   it('reject prefix notation', () => {
     expect(() => answer('What is plus 1 2?')).toThrow(new Error('Syntax error'))
+  })
+})
+
+describe('Wordy 2', () => {
+  it('addition and subtraction and divided', () => {
+    expect(answerAlgebraicallyCorrect('What is 1 plus 5 minus 2 divided by 2?')).toEqual(5)
+  })
+
+  it('multiple subtraction and multiplication', () => {
+    expect(answerAlgebraicallyCorrect('What is 20 minus 4 minus 13 multiplied by 2?')).toEqual(-10)
   })
 })
