@@ -29,31 +29,30 @@ function preValidateTokens(tokens: Token[]): ValidToken[] {
 
 function buildAST(tokens: ValidToken[], priority: Record<string, number>): Node | number {
   const trees: (Node | number)[] = [];
-  const output: (ValidToken | number)[] = [];
+  const reorderingOutputRPN: ValidToken[] = [];
   const operators: ValidToken[] = [];
 
   for (let i = 0; i < tokens.length; i++) {
     const token: Token = tokens[i];
 
     if (token.type === 'OPERAND') {
-      output.push(token.value);
+      reorderingOutputRPN.push(token);
     } else if (token.type === 'OPERATOR') {
-      while (operators.length > 0
-      && priority[operators[operators.length - 1].value]
+      while (operators.length > 0 && priority[operators[operators.length - 1].value]
       >= priority[token.value]) {
-        output.push(operators.pop()!);
+        reorderingOutputRPN.push(operators.pop()!);
       }
       operators.push(token);
     }
   }
 
   while (operators.length > 0) {
-    output.push(operators.pop()!);
+    reorderingOutputRPN.push(operators.pop()!);
   }
 
-  for (const item of output) {
-    if (typeof item === 'number') {
-      trees.push(item);
+  for (const item of reorderingOutputRPN) {
+    if (item.type === 'OPERAND') {
+      trees.push(item.value);
     } else if (item.type === 'OPERATOR') {
       const right: number | Node = trees.pop()!;
       const left: number | Node = trees.pop()!;
@@ -121,6 +120,9 @@ function evaluateAST(node: Node | number): number {
 function calculate(question: string, priority: Record<string, number>): number {
   const tokens: Token[] = lexer(question);
   const validTokens: ValidToken[] = preValidateTokens(tokens);
+  if (validTokens.length === 1) {
+    return Number(validTokens[0].value);
+  }
   const ast: number | Node = buildAST(validTokens, priority);
   return evaluateAST(ast);
 }
