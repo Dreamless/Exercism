@@ -16,29 +16,27 @@ export class SimpleCipher {
 
   private shift(char: string, shift: number): string {
     const charIndex = SimpleCipher.alphabet.indexOf(char);
-    const newIndex = (charIndex + shift + 26) % 26;
+    const alphabetLength: number = SimpleCipher.alphabet.length;
+    const newIndex = (charIndex + shift + alphabetLength) % alphabetLength;
     return SimpleCipher.alphabet[newIndex];
   }
 
-  encode(text: string): string {
+  private transformText(text: string, shiftDirection: number): string {
     return text
       .split('')
       .map((char, i) => {
         const keyChar = this.key[i % this.key.length];
-        const shift = SimpleCipher.alphabet.indexOf(keyChar);
+        const shift = SimpleCipher.alphabet.indexOf(keyChar) * shiftDirection;
         return this.shift(char, shift);
       })
       .join('');
   }
 
+  encode(text: string): string {
+    return this.transformText(text, 1)
+  }
+
   decode(cipher: string): string {
-    return cipher
-      .split('')
-      .map((char, i) => {
-        const keyChar = this.key[i % this.key.length];
-        const shift = SimpleCipher.alphabet.indexOf(keyChar);
-        return this.shift(char, -shift);
-      })
-      .join('');
+    return this.transformText(cipher, -1);
   }
 }
