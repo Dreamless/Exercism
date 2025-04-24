@@ -1,51 +1,46 @@
-type Token =
+type ValidToken =
   | { type: 'OPERAND'; value: number }
-  | { type: 'OPERATOR' | 'UNKNOWN'; value: string };
+  | { type: 'OPERATOR'; value: string };
+
+type Token =
+  | ValidToken
+  | { type: 'UNKNOWN'; value: string };
 
 class Node {
   operator: string;
-  leftOperand: Node | number | null;
-  rightOperand: Node | number | null;
+  leftOperand: Node | number;
+  rightOperand: Node | number;
 
-  constructor(operator: string, leftOperand: Node | number | null, rightOperand: Node | number | null) {
+  constructor(operator: string, leftOperand: Node | number, rightOperand: Node | number) {
     this.operator = operator;
     this.leftOperand = leftOperand;
     this.rightOperand = rightOperand;
   }
 }
 
-function buildAST(tokens: Token[], priority: Record<string, number>): Node | number {
-  const tree: (Node | number)[] = [];
-  const output: (Token | number)[] = [];
-  const operators: Token[] = [];
+function preValidateTokens(tokens: Token[]): ValidToken[] {
+  tokens.forEach((val, i) => {
+    if (val.type === 'UNKNOWN') throw new Error('Unknown operation')
+    if (i > 0 && (val.type === tokens[i - 1].type || tokens.length < 3)) throw new Error('Syntax error')
+  })
 
-  if (tokens[0].type === 'UNKNOWN') {
-    throw new Error('Unknown operation');
-  }
+  return tokens as ValidToken[];
+}
+
+function buildAST(tokens: ValidToken[], priority: Record<string, number>): Node | number {
+  const trees: (Node | number)[] = [];
+  const output: (ValidToken | number)[] = [];
+  const operators: ValidToken[] = [];
 
   for (let i = 0; i < tokens.length; i++) {
     const token: Token = tokens[i];
-    const nextToken: Token = tokens[i + 1];
 
     if (token.type === 'OPERAND') {
-      if (nextToken?.type === 'UNKNOWN') {
-        throw new Error('Unknown operation');
-      }
-
-      if (nextToken?.type === 'OPERAND') {
-        throw new Error('Syntax error');
-      }
-
       output.push(token.value);
     } else if (token.type === 'OPERATOR') {
-      if (nextToken?.type !== 'OPERAND') {
-        throw new Error('Syntax error');
-      }
-
-      while (
-        operators.length > 0 &&
-        priority[operators[operators.length - 1].value] >= priority[token.value]
-        ) {
+      while (operators.length > 0
+      && priority[operators[operators.length - 1].value]
+      >= priority[token.value]) {
         output.push(operators.pop()!);
       }
       operators.push(token);
@@ -58,15 +53,19 @@ function buildAST(tokens: Token[], priority: Record<string, number>): Node | num
 
   for (const item of output) {
     if (typeof item === 'number') {
-      tree.push(item);
+      trees.push(item);
     } else if (item.type === 'OPERATOR') {
-      const right: number | Node = tree.pop()!;
-      const left: number | Node = tree.pop()!;
-      tree.push(new Node(item.value, left, right));
+      const right: number | Node = trees.pop()!;
+      const left: number | Node = trees.pop()!;
+      trees.push(new Node(item.value, left, right));
     }
   }
 
-  return tree[0];
+  if (trees.length !== 1) {
+    throw new Error('Syntax error: Invalid tree');
+  }
+
+  return trees[0];
 }
 
 function lexer(question: string): Token[] {
@@ -87,7 +86,7 @@ function lexer(question: string): Token[] {
 
   words.forEach(word => {
     const num = Number(word);
-    if (!isNaN(Number(word))) {
+    if (!isNaN(num)) {
       tokens.push({type: 'OPERAND', value: num});
     } else if (operators.includes(word)) {
       tokens.push({type: 'OPERATOR', value: word});
@@ -99,37 +98,11 @@ function lexer(question: string): Token[] {
   return tokens;
 }
 
-export function answer(question: string): number {
-  const tokens: Token[] = lexer(question);
-  const priority = {
-    plus: 1,
-    minus: 1,
-    multiplied: 1,
-    divided: 1
-  };
-  const ast: number | Node = buildAST(tokens, priority);
-
-  return evaluateAST(ast);
-}
-
-export function answerAlgebraicallyCorrect(question: string): number {
-  const tokens: Token[] = lexer(question);
-  const priority = {
-    plus: 1,
-    minus: 1,
-    multiplied: 2,
-    divided: 2
-  };
-  const ast: number | Node = buildAST(tokens, priority);
-
-  return evaluateAST(ast);
-}
-
 function evaluateAST(node: Node | number): number {
   if (typeof node === 'number') return node;
 
-  const left: number = evaluateAST(node.leftOperand!);
-  const right: number = evaluateAST(node.rightOperand!);
+  const left: number = evaluateAST(node.leftOperand);
+  const right: number = evaluateAST(node.rightOperand);
 
   switch (node.operator) {
     case 'plus':
@@ -143,4 +116,31 @@ function evaluateAST(node: Node | number): number {
     default:
       throw new Error(`Unknown operator: ${node.operator}`);
   }
+}
+
+function calculate(question: string, priority: Record<string, number>): number {
+  const tokens: Token[] = lexer(question);
+  const validTokens: ValidToken[] = preValidateTokens(tokens);
+  const ast: number | Node = buildAST(validTokens, priority);
+  return evaluateAST(ast);
+}
+
+export function answer(question: string): number {
+  const priority = {
+    plus: 1,
+    minus: 1,
+    multiplied: 1,
+    divided: 1,
+  };
+  return calculate(question, priority);
+}
+
+export function answerAlgebraicallyCorrect(question: string): number {
+  const priority = {
+    plus: 1,
+    minus: 1,
+    multiplied: 2,
+    divided: 2,
+  };
+  return calculate(question, priority);
 }
