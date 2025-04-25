@@ -6,7 +6,7 @@ export function encode(str: string): string {
 
   for (let i = 0; i < str.length; i++) {
     const currVal = str[i];
-    const nextVal = str[i + 1];
+    const nextVal: string | boolean = (i + 1 < str.length) && str[i + 1];
 
     if (currVal === nextVal) {
       count++;

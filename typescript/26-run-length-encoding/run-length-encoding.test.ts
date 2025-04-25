@@ -65,6 +65,16 @@ describe('run-length decode a string', () => {
     const expected = 'aabbbcccc'
     expect(decode('2a3b4c')).toEqual(expected)
   })
+
+  it('five a in row', () => {
+    const expected = 'aaaaa'
+    expect(decode('aaaaa')).toEqual(expected)
+  })
+
+  it('single a', () => {
+    const expected = 'a'
+    expect(decode('a')).toEqual(expected)
+  })
 })
 
 describe('encode and then decode', () => {
