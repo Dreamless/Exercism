@@ -120,9 +120,6 @@ function evaluateAST(node: Node | number): number {
 function calculate(question: string, priority: Record<string, number>): number {
   const tokens: Token[] = lexer(question);
   const validTokens: ValidToken[] = preValidateTokens(tokens);
-  if (validTokens.length === 1) {
-    return Number(validTokens[0].value);
-  }
   const ast: number | Node = buildAST(validTokens, priority);
   return evaluateAST(ast);
 }
