@@ -82,6 +82,10 @@ describe('Wordy', () => {
     expect(() => answer('What is 1 plus?')).toThrow(new Error('Syntax error'))
   })
 
+  it('2 operands and 2 operators in row', () => {
+    expect(() => answer('What is 1 plus 2 plus?')).toThrow(new Error('Syntax error'))
+  })
+
   it('reject problem with no operands or operators', () => {
     expect(() => answer('What is?')).toThrow(new Error('Syntax error'))
   })

@@ -18,11 +18,21 @@ class Node {
   }
 }
 
+function ensureExists<T>(val: T | null | undefined): T {
+  if (val === undefined || val === null) {
+    throw new Error('Syntax error');
+  }
+
+  return val;
+}
+
 function preValidateTokens(tokens: Token[]): ValidToken[] {
-  tokens.forEach((val, i) => {
-    if (val.type === 'UNKNOWN') throw new Error('Unknown operation')
-    if (i > 0 && (val.type === tokens[i - 1].type || tokens.length < 3)) throw new Error('Syntax error')
-  })
+  if (tokens.some(token => token.type === "UNKNOWN")) throw new Error('Unknown operation');
+  if (tokens.length % 2 === 0 || tokens[0].type !== "OPERAND") throw new Error('Syntax error');
+
+  for (let i = 1; i < tokens.length; i++) {
+    if (tokens[i].type === tokens[i - 1].type) throw new Error('Syntax error');
+  }
 
   return tokens as ValidToken[];
 }
@@ -38,8 +48,8 @@ function buildAST(tokens: ValidToken[], priority: Record<string, number>): Node 
     if (token.type === 'OPERAND') {
       reorderingOutputRPN.push(token);
     } else if (token.type === 'OPERATOR') {
-      while (operators.length > 0 && priority[operators[operators.length - 1].value]
-      >= priority[token.value]) {
+      while (operators.length > 0
+      && priority[operators[operators.length - 1].value] >= priority[token.value]) {
         reorderingOutputRPN.push(operators.pop()!);
       }
       operators.push(token);
@@ -54,8 +64,8 @@ function buildAST(tokens: ValidToken[], priority: Record<string, number>): Node 
     if (item.type === 'OPERAND') {
       trees.push(item.value);
     } else if (item.type === 'OPERATOR') {
-      const right: number | Node = trees.pop()!;
-      const left: number | Node = trees.pop()!;
+      const right: number | Node = ensureExists(trees.pop())
+      const left: number | Node = ensureExists(trees.pop());
       trees.push(new Node(item.value, left, right));
     }
   }
