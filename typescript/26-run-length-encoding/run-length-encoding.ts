@@ -4,14 +4,14 @@ export function encode(str: string): string {
   let newStr = "";
   let count = 1;
 
-  for (let i = 0; i < str.length; i++) {
+  for (let i = 1; i < str.length; i++) {
+    const prevVal = str[i - 1];
     const currVal = str[i];
-    const nextVal: string | boolean = (i + 1 < str.length) && str[i + 1];
 
-    if (currVal === nextVal) {
+    if (prevVal === currVal) {
       count++;
     } else {
-      newStr += (count > 1 ? count : "") + currVal;
+      newStr += count > 1 ? `${count}${currVal}` : currVal;
       count = 1;
     }
   }

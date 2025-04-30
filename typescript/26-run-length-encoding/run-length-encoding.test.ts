@@ -12,6 +12,16 @@ describe('run-length encode a string', () => {
     expect(encode('XYZ')).toEqual(expected)
   })
 
+  it('five a in row', () => {
+    const expected = '5a'
+    expect(encode('aaaaa')).toEqual(expected)
+  })
+
+  it('single a', () => {
+    const expected = 'a'
+    expect(encode('a')).toEqual(expected)
+  })
+
   it('string with no single characters', () => {
     const expected = '2A3B4C'
     expect(encode('AABBBCCCC')).toEqual(expected)
@@ -64,16 +74,6 @@ describe('run-length decode a string', () => {
   it('lower case string', () => {
     const expected = 'aabbbcccc'
     expect(decode('2a3b4c')).toEqual(expected)
-  })
-
-  it('five a in row', () => {
-    const expected = 'aaaaa'
-    expect(decode('aaaaa')).toEqual(expected)
-  })
-
-  it('single a', () => {
-    const expected = 'a'
-    expect(decode('a')).toEqual(expected)
   })
 })
 
