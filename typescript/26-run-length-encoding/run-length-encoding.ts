@@ -1,22 +1,25 @@
 export function encode(str: string): string {
   if (str.length === 0) return "";
 
-  let newStr = "";
+  let result = "";
   let count = 1;
+  let prevChar = str[0];
 
   for (let i = 1; i < str.length; i++) {
-    const prevVal = str[i - 1];
-    const currVal = str[i];
+    const currChar = str[i];
 
-    if (prevVal === currVal) {
+    if (prevChar === currChar) {
       count++;
     } else {
-      newStr += count > 1 ? `${count}${currVal}` : currVal;
+      result += count > 1 ? `${count}${prevChar}` : prevChar;
       count = 1;
+      prevChar = currChar;
     }
   }
 
-  return newStr;
+  result += count > 1 ? `${count}${prevChar}` : prevChar;
+
+  return result;
 }
 
 export function decode(str: string): string {
