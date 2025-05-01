@@ -60,7 +60,7 @@ export function maze_solver(
   const path: Point[] = [];
 
   for (let i = 0; i < maze.length; i++)
-    seen.push(new Array(maze[0].length).fill(false));
+    seen.push(new Array<boolean>(maze[0].length).fill(false));
 
   walk(maze, wall, start, end, seen, path);
 
