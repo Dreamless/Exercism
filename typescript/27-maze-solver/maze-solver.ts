@@ -1,3 +1,8 @@
+/*
+  Implement a function that solves a 2D grid-based maze by finding a path
+  from a starting point to an ending point while avoiding obstacles (walls).
+ */
+
 type Point = {
   x: number;
   y: number;
