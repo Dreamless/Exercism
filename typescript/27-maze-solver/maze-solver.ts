@@ -1,8 +1,3 @@
-/*
-  Implement a function that solves a 2D grid-based maze by finding a path
-  from a starting point to an ending point while avoiding obstacles (walls).
- */
-
 type Point = {
   x: number;
   y: number;
@@ -55,6 +50,26 @@ function walk(
   return false;
 }
 
+/**
+ * Solves a 2D grid-based maze by finding a path
+ * from a starting point to an ending point while avoiding obstacles (walls).
+ *
+ * @param {string[]} maze An array of strings representing a 2D matrix
+ * where each string is a row and each character represents a cell.
+ * Any char might be passage except a wall character
+ * Example:
+ * [
+ * "#####",
+ * " # #",
+ * "# ###",
+ * "#  ##",
+ * "# ###"
+ * ]
+ * @param {string} wall any single symbol (|, x, *) denoting a wall segment that cannot be passed through
+ * @param {Point} start labyrinth entrance position coordinates
+ * @param {Point} end labyrinth exit position coordinates
+ * @return {Array[Point]} path from the passed coordinates to the exit
+ */
 export function maze_solver(
   maze: string[],
   wall: string,

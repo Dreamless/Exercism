@@ -46,8 +46,8 @@ describe('Maze solver', () => {
     const end = {x: 0, y: 1}
 
     const expected: { x: number, y: number }[] = [
-      { "x": 0, "y": 0 },
-      { "x": 0, "y": 1}
+      {"x": 0, "y": 0},
+      {"x": 0, "y": 1}
     ]
 
     expect(maze_solver(maze, "*", start, end)).toEqual(expected)
