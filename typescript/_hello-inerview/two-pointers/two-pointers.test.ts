@@ -1,6 +1,7 @@
 import { describe, it, expect } from '@jest/globals'
 import { twoSum } from "./two-sum.ts"
 import { maxArea } from "./max-area.ts"
+import { threeSum } from "./3-sum.ts"
 
 describe('Two sum', () => {
   it('valid pair exists', () => {
@@ -29,3 +30,19 @@ describe('Container With Most Water', () => {
     expect(maxArea(heights)).toBe(1)
   })
 })
+
+describe('3-Sum', () => {
+  it('all unique triplets that sum to zero', () => {
+    const nums = [-1, 0, 1, 2, -1, -4]
+    expect(threeSum(nums)).toEqual([
+      [-1, -1, 2],
+      [-1, 0, 1],
+    ])
+  })
+
+  it('empty array when no triplets sum to zero', () => {
+    const nums = [1, 2, 3, 4, 5]
+    expect(threeSum(nums)).toEqual([])
+  })
+})
+
