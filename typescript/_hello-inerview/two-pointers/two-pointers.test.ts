@@ -5,6 +5,7 @@ import { threeSum } from "./3-sum.ts"
 import { triangleNumber } from "./triangle-numbers.js"
 import { moveZeroes } from "./move-zeroes.ts"
 import { sortColors } from "./sort-colors.ts"
+import { trappingWater } from "./trapping-water.ts"
 
 describe('Two sum', () => {
   it('valid pair exists', () => {
@@ -102,5 +103,23 @@ describe('move zeroes', () => {
     const nums = [1, 2, 3]
     moveZeroes(nums)
     expect(nums).toEqual([1, 2, 3])
+  })
+})
+
+
+describe('trapping water', () => {
+  it('base case', () => {
+    const heights = [0,1,0,2,1,0,1,3,2,1,2,1]
+    expect(trappingWater(heights)).toBe(6)
+  })
+
+  it('no water can be trapped', () => {
+    const heights = [1, 2, 3, 4, 5]
+    expect(trappingWater(heights)).toBe(0)
+  })
+
+  it('flat surface', () => {
+    const heights = [0, 0, 0, 0]
+    expect(trappingWater(heights)).toBe(0)
   })
 })
