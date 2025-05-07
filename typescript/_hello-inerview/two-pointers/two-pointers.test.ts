@@ -2,6 +2,7 @@ import { describe, it, expect } from '@jest/globals'
 import { twoSum } from "./two-sum.ts"
 import { maxArea } from "./max-area.ts"
 import { threeSum } from "./3-sum.ts"
+import { triangleNumber } from "./triangle-numbers.js"
 
 describe('Two sum', () => {
   it('valid pair exists', () => {
@@ -46,3 +47,24 @@ describe('3-Sum', () => {
   })
 })
 
+describe('Triangle Numbers', () => {
+  //  2 + 2 > 3
+  //  2 + 3 > 4
+  // 2 + 2 > 4 (invalid)
+  it('base case', () => {
+    expect(triangleNumber([2, 2, 3, 4])).toBe(3)
+  })
+
+  it('return 0 for arrays with less than 3 elements', () => {
+    expect(triangleNumber([1])).toBe(0)
+    expect(triangleNumber([1, 2])).toBe(0)
+  })
+
+  it('return 0 for invalid combinations', () => {
+    expect(triangleNumber([1, 2, 5, 10])).toBe(0)
+  })
+
+  it('return 10 for [4, 5, 6, 7, 8]', () => {
+    expect(triangleNumber([4, 5, 6, 7, 8])).toBe(10)
+  })
+})
