@@ -1,4 +1,4 @@
-type Allergen =
+export type Allergen =
   | 'eggs'
   | 'peanuts'
   | 'shellfish'
@@ -10,34 +10,45 @@ type Allergen =
 
 export class Allergies {
   private readonly score: number;
-  private readonly allergens: Allergen[];
+  public static allergens: Allergen[] = [
+    'eggs',
+    'peanuts',
+    'shellfish',
+    'strawberries',
+    'tomatoes',
+    'chocolate',
+    'pollen',
+    'cats',
+  ];
 
   constructor(allergenIndex: number) {
     this.score = allergenIndex;
-
-    this.allergens = [
-      'eggs',
-      'peanuts',
-      'shellfish',
-      'strawberries',
-      'tomatoes',
-      'chocolate',
-      'pollen',
-      'cats',
-    ]
   }
 
   public list(): Allergen[] {
     const result: Allergen[] = [];
-    for (let i = 0; i < this.allergens.length; i++) {
+    for (let i = 0; i < Allergies.allergens.length; i++) {
       if ((this.score & (1 << i)) !== 0) {
-        result.push(this.allergens[i]);
+        result.push(Allergies.allergens[i]);
       }
     }
     return result;
   }
 
   public allergicTo(allergen: Allergen): boolean {
-    return (this.score & (1 << this.allergens.indexOf(allergen))) !== 0;
+    return (this.score & (1 << Allergies.allergens.indexOf(allergen))) !== 0;
   }
 }
+
+export function calculateScore(allergensSet: Set<Allergen>): number {
+  let score = 0;
+
+  for (let i = 0; i < Allergies.allergens.length; i++) {
+    if (allergensSet.has(Allergies.allergens[i])) {
+      score |= 1 << i;
+    }
+  }
+
+  return score;
+}
+

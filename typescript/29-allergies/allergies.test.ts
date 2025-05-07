@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@jest/globals'
-import { Allergies } from './allergies.ts'
+import { Allergies, calculateScore } from './allergies.ts'
 
 describe('allergicTo', () => {
   it('no allergies means not allergic', () => {
@@ -111,5 +111,39 @@ describe('list', () => {
     const expected = ['eggs']
 
     expect(allergies.list()).toEqual(expected)
+  })
+})
+
+describe('Allergens score', () => {
+  it('allergies at all score', () => {
+    expect(calculateScore(new Set([
+      'eggs',
+      'peanuts',
+      'shellfish',
+      'strawberries',
+      'tomatoes',
+      'chocolate',
+      'pollen',
+      'cats',
+    ]))).toEqual(255)
+  })
+
+  it('allergy only for eggs', () => {
+    expect(calculateScore(new Set([
+      'eggs',
+      'eggs',
+    ]))).toEqual(1)
+  })
+
+  it('allergy for eggs and peanuts', () => {
+    expect(calculateScore(new Set(['eggs', 'peanuts']))).toEqual(3)
+  })
+
+  it('allergy for shellfish and chocolate', () => {
+    expect(calculateScore(new Set(['shellfish', 'chocolate']))).toEqual(36)
+  })
+
+  it('combination of multiple allergens', () => {
+    expect(calculateScore(new Set(['eggs', 'shellfish', 'pollen']))).toEqual(69)
   })
 })
