@@ -3,6 +3,7 @@ import { twoSum } from "./two-sum.ts"
 import { maxArea } from "./max-area.ts"
 import { threeSum } from "./3-sum.ts"
 import { triangleNumber } from "./triangle-numbers.js"
+import { sortColors } from "./sort-colors.ts"
 
 describe('Two sum', () => {
   it('valid pair exists', () => {
@@ -66,5 +67,25 @@ describe('Triangle Numbers', () => {
 
   it('return 10 for [4, 5, 6, 7, 8]', () => {
     expect(triangleNumber([4, 5, 6, 7, 8])).toBe(10)
+  })
+})
+
+describe('sortColors', () => {
+  it('base case', () => {
+    const nums = [2, 0, 2, 1, 1, 0]
+    sortColors(nums)
+    expect(nums).toEqual([0, 0, 1, 1, 2, 2])
+  })
+
+  it('already sorted input', () => {
+    const nums = [0, 0, 1, 1, 2, 2]
+    sortColors(nums)
+    expect(nums).toEqual([0, 0, 1, 1, 2, 2])
+  })
+
+  it('same elements', () => {
+    const nums = [1, 1, 1]
+    sortColors(nums)
+    expect(nums).toEqual([1, 1, 1])
   })
 })
