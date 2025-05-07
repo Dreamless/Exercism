@@ -3,6 +3,7 @@ import { twoSum } from "./two-sum.ts"
 import { maxArea } from "./max-area.ts"
 import { threeSum } from "./3-sum.ts"
 import { triangleNumber } from "./triangle-numbers.js"
+import { moveZeroes } from "./move-zeroes.ts"
 import { sortColors } from "./sort-colors.ts"
 
 describe('Two sum', () => {
@@ -87,5 +88,19 @@ describe('sortColors', () => {
     const nums = [1, 1, 1]
     sortColors(nums)
     expect(nums).toEqual([1, 1, 1])
+  })
+})
+
+describe('move zeroes', () => {
+  it('moves zeros to the end (basic case)', () => {
+    const nums = [0, 1, 0, 3, 12]
+    moveZeroes(nums)
+    expect(nums).toEqual([1, 3, 12, 0, 0])
+  })
+
+  it('no zeros array', () => {
+    const nums = [1, 2, 3]
+    moveZeroes(nums)
+    expect(nums).toEqual([1, 2, 3])
   })
 })
