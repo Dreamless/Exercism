@@ -2,7 +2,7 @@ import {describe, it, expect} from '@jest/globals'
 import {maze_solver} from "./maze-solver.js"
 
 describe('Maze solver', () => {
-  it('generates keys at random', () => {
+  it('solves passage through a long maze', () => {
     const maze: string[] = [
       "xxxxxxxxxx x",
       "x        x x",

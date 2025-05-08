@@ -3,7 +3,7 @@ type Point = {
   y: number;
 };
 
-const DIRECTIONS: number[][] = [
+const DIRECTIONS: [number, number][] = [
   [1, 0],
   [0, 1],
   [0, -1],
