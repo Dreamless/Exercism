@@ -9,7 +9,7 @@ export type Allergen =
   | 'cats';
 
 export class Allergies {
-  private readonly score: number;
+  public readonly score: number;
   public static allergens: Allergen[] = [
     'eggs',
     'peanuts',
@@ -52,3 +52,6 @@ export function calculateScore(allergensSet: Set<Allergen>): number {
   return score;
 }
 
+export function commonAllergies(alice: Allergies, bob: Allergies): Allergies {
+  return new Allergies(alice.score & bob.score);
+}

@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@jest/globals'
-import { Allergies, calculateScore } from './allergies.ts'
+import {Allergies, calculateScore, commonAllergies, Allergen} from './allergies.ts'
 
 describe('allergicTo', () => {
   it('no allergies means not allergic', () => {
@@ -145,5 +145,77 @@ describe('Allergens score', () => {
 
   it('combination of multiple allergens', () => {
     expect(calculateScore(new Set(['eggs', 'shellfish', 'pollen']))).toEqual(69)
+  })
+})
+
+describe('Shared allergies', () => {
+  function sharedAllergiesHelper(aliceAllergies: Allergen[], bobAllergies: Allergen[], expectedAllergies: Allergen[]): void {
+    const aliceScore = calculateScore(new Set(aliceAllergies))
+    const bobScore = calculateScore(new Set(bobAllergies))
+    const expectedScore = calculateScore(new Set(expectedAllergies))
+
+    const aliceAllergy = new Allergies(aliceScore)
+    const bobAllergy = new Allergies(bobScore)
+    const expected = new Allergies(expectedScore)
+
+    return expect(commonAllergies(aliceAllergy, bobAllergy)).toEqual(expected)
+  }
+
+  it('allergies to eggs and pollen', ()=> {
+    const aliceAllergies: Allergen[] = ['eggs', 'shellfish', 'pollen']
+    const bobAllergies: Allergen[] = ['eggs', 'pollen']
+    const expectedAllergies: Allergen[] = ['eggs', 'pollen']
+
+    sharedAllergiesHelper(aliceAllergies, bobAllergies, expectedAllergies)
+  })
+
+  it('only pollen allergy in common', ()=> {
+    const aliceAllergies: Allergen[] = ['shellfish', 'pollen']
+    const bobAllergies: Allergen[] = ['eggs', 'pollen']
+    const expectedAllergies: Allergen[] = ['pollen']
+
+    sharedAllergiesHelper(aliceAllergies, bobAllergies, expectedAllergies)
+  })
+
+  it('no allergy in common', ()=> {
+    const aliceAllergies: Allergen[] = ['shellfish', 'pollen']
+    const bobAllergies: Allergen[] = ['eggs', 'chocolate']
+    const expectedAllergies: Allergen[] = []
+
+    sharedAllergiesHelper(aliceAllergies, bobAllergies, expectedAllergies)
+  })
+
+  it('allergy to chocolate and peanuts', ()=> {
+    const aliceAllergies: Allergen[] = ['chocolate', 'peanuts']
+    const bobAllergies: Allergen[] = [
+      'eggs',
+      'peanuts',
+      'shellfish',
+      'strawberries',
+      'tomatoes',
+      'chocolate',
+      'pollen',
+      'cats',
+    ]
+    const expectedAllergies: Allergen[] = ['chocolate', 'peanuts']
+
+    sharedAllergiesHelper(aliceAllergies, bobAllergies, expectedAllergies)
+  })
+
+  it('bob and alice have the same allergy', ()=> {
+    const allergies: Allergen[] = [
+      'eggs',
+      'peanuts',
+      'shellfish',
+      'strawberries',
+    ]
+
+    sharedAllergiesHelper(allergies, allergies, allergies)
+  })
+
+  it('no input allergies', ()=> {
+    const allergies: Allergen[] = []
+
+    sharedAllergiesHelper(allergies, allergies, allergies)
   })
 })
