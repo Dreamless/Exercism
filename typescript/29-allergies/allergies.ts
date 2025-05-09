@@ -55,3 +55,8 @@ export function calculateScore(allergensSet: Set<Allergen>): number {
 export function commonAllergies(alice: Allergies, bob: Allergies): Allergies {
   return new Allergies(alice.score & bob.score);
 }
+
+export function combinedAllergies(people: Allergies[]): Allergies {
+  const score: number = people.reduce((acc: number, person: Allergies): number => acc | person.score, 0);
+  return new Allergies(score);
+}

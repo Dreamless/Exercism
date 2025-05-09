@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@jest/globals'
-import {Allergies, calculateScore, commonAllergies, Allergen} from './allergies.ts'
+import {Allergies, calculateScore, commonAllergies, Allergen, combinedAllergies} from './allergies.ts'
 
 describe('allergicTo', () => {
   it('no allergies means not allergic', () => {
@@ -217,5 +217,84 @@ describe('Shared allergies', () => {
     const allergies: Allergen[] = []
 
     sharedAllergiesHelper(allergies, allergies, allergies)
+  })
+})
+
+describe('Combined allergies', () => {
+  const bob: Allergen[] = ['chocolate', 'peanuts']
+  const dylan: Allergen[] = [
+    'eggs',
+    'peanuts',
+    'shellfish',
+    'strawberries',
+  ]
+  const alice: Allergen[] = ['cats', 'pollen']
+  const cooper: Allergen[] = [
+    'tomatoes',
+    'chocolate',
+    'pollen',
+    'cats',
+  ]
+  const john: Allergen[] = ['strawberries', 'tomatoes', 'cats']
+  const sally: Allergen[] = ['eggs', 'tomatoes', 'chocolate', 'shellfish']
+
+  function unionAllergicPeople(...allergens: Allergen[][]): Allergies[] {
+    const allergies: Allergies[] = []
+
+    for (let i = 0; i < allergens.length; i++) {
+      const score = calculateScore(new Set(allergens[i]))
+      allergies.push(new Allergies(score))
+    }
+
+    return allergies
+  }
+
+  it('all possible allergies', ()=> {
+    const people: Allergies[] = unionAllergicPeople(john, sally, bob, dylan, cooper)
+    const expectedScore = calculateScore(new Set([
+      'eggs',
+      'peanuts',
+      'shellfish',
+      'strawberries',
+      'tomatoes',
+      'chocolate',
+      'pollen',
+      'cats',
+    ]))
+    const expected = new Allergies(expectedScore)
+
+    expect(combinedAllergies(people)).toEqual(expected)
+  })
+
+  it('no input allergies', ()=> {
+    const people: Allergies[] = unionAllergicPeople([])
+    const expectedScore = calculateScore(new Set([]))
+    const expected = new Allergies(expectedScore)
+
+    expect(combinedAllergies(people)).toEqual(expected)
+  })
+
+  it('single person allergies', ()=> {
+    const people: Allergies[] = unionAllergicPeople(alice)
+    const expectedScore = calculateScore(new Set(alice))
+    const expected = new Allergies(expectedScore)
+
+    expect(combinedAllergies(people)).toEqual(expected)
+  })
+
+  it('combined two people', ()=> {
+    const people: Allergies[] = unionAllergicPeople(alice, cooper)
+    const expectedScore = calculateScore(new Set([...alice, ...cooper]))
+    const expected = new Allergies(expectedScore)
+
+    expect(combinedAllergies(people)).toEqual(expected)
+  })
+
+  it('combined three people', ()=> {
+    const people: Allergies[] = unionAllergicPeople(bob, alice, john)
+    const expectedScore = calculateScore(new Set([...alice, ...bob, ...john]))
+    const expected = new Allergies(expectedScore)
+
+    expect(combinedAllergies(people)).toEqual(expected)
   })
 })
