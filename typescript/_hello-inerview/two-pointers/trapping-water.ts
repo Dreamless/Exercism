@@ -1,3 +1,9 @@
+/**
+ * Trapping Rain Water
+ * Write a function to calculate the total amount of water trapped between
+ * bars on an elevation map, where each bar's width is 1. The input is given
+ * as an array of n non-negative integers height representing the height of each bar.
+ */
 export function trappingWater(heights: number[]): number {
   let left = 0;
   let right = heights.length - 1;
