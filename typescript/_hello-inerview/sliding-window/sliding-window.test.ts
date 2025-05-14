@@ -4,6 +4,7 @@ import {longestSubstringWithoutRepeat} from "./longest-substring.ts"
 import {characterReplacement} from "./character-replacment.ts"
 import {maxSubarraySum} from "./sum-of-subarrays.ts"
 import {maxScore} from "./max-score.ts"
+import {maxUniqueWindowSum} from "./max-sum.ts"
 
 describe('Fruit into basket', () => {
   it('case 1', () => {
@@ -63,5 +64,13 @@ describe('Max Points You Can Obtain From Cards', () => {
     const cards = [2, 2, 2]
     const k = 3
     expect(maxScore(cards, k)).toBe(6)
+  })
+})
+
+describe('Max Sum of Distinct Subarrays Length k', () => {
+  it('base case)', () => {
+    const nums = [3, 2, 2, 3, 4, 6, 7, 7, -1]
+    const k = 4
+    expect(maxUniqueWindowSum(nums, k)).toBe(20)
   })
 })
