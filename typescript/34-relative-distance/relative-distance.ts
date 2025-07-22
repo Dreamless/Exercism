@@ -7,12 +7,23 @@ export function degreesOfSeparation(
   const graph: Record<string, Set<string>> = {};
 
   for (const parent in familyTree) {
-    for (const child of familyTree[parent]) {
+    const children: string[] = familyTree[parent];
+    for (const child of children) {
       if (!graph[parent]) graph[parent] = new Set();
       graph[parent].add(child);
-
       if (!graph[child]) graph[child] = new Set();
       graph[child].add(parent);
+    }
+
+    for (let i = 0; i < children.length; i++) {
+      for (let j = i + 1; j < children.length; j++) {
+        const childA = children[i];
+        const childB = children[j];
+        if (!graph[childA]) graph[childA] = new Set();
+        graph[childA].add(childB);
+        if (!graph[childB]) graph[childB] = new Set();
+        graph[childB].add(childA);
+      }
     }
   }
 
