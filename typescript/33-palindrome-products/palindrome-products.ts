@@ -45,8 +45,8 @@ export function generate({ maxFactor, minFactor = 0 }: Input): Output {
   }
 
   return {
-    smallest: smallest ?? { value: null, factors: [] },
-    largest: largest ?? { value: null, factors: [] },
+    smallest,
+    largest,
   };
 }
 
