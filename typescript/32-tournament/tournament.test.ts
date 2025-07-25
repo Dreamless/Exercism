@@ -195,4 +195,22 @@ describe('Tournament', () => {
       ].join('\n')
     )
   })
+
+  it('large number of matches between two teams with long team name', () => {
+    const matches = []
+    const longTeamName = 'My very long team name geez I wonder what would happen with my table layout'
+    const shortTeamName = 'Short Team'
+
+    for (let i = 0; i < 105; i++) {
+      matches.push(`${longTeamName};${shortTeamName};win`)
+    }
+
+    expect(new Tournament().tally(matches.join('\n'))).toBe(
+      [
+        'Team                                                                        | MP |  W |  D |  L |  P',
+        `My very long team name geez I wonder what would happen with my table layout | 105 | 105 |  0 |  0 | 315`,
+        `Short Team                                                                  | 105 |  0 |  0 | 105 |  0`,
+      ].join('\n')
+    )
+  })
 })
