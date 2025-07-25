@@ -3,52 +3,40 @@ export function degreesOfSeparation(
   personA: string,
   personB: string
 ): number {
-  if (personA === personB) return 0;
+  function getAncestors(person: string): Map<string, number> {
+    const ancestors = new Map<string, number>();
+    const queue: [string, number][] = [[person, 0]];
 
-  const childToParent: Record<string, string> = {};
-  for (const parent in familyTree) {
-    for (const child of familyTree[parent]) {
-      childToParent[child] = parent;
-    }
-  }
+    while (queue.length > 0) {
+      const [current, depth] = queue.shift()!;
+      if (!ancestors.has(current)) {
+        ancestors.set(current, depth);
 
-  const visited = new Set<string>();
-  const queue: [string, number][] = [[personA, 0]];
-  visited.add(personA);
-
-  while (queue.length > 0) {
-    const [current, distance] = queue.shift()!;
-
-    const neighbors: string[] = [];
-    const parent = childToParent[current];
-
-    if (parent) {
-      neighbors.push(parent);
-    }
-
-    if (familyTree[current]) {
-      neighbors.push(...familyTree[current]);
-    }
-
-    if (parent && familyTree[parent]) {
-      for (const sibling of familyTree[parent]) {
-        if (sibling !== current) {
-          neighbors.push(sibling);
+        for (const parent in familyTree) {
+          if (familyTree[parent].includes(current)) {
+            queue.push([parent, depth + 1]);
+          }
         }
       }
     }
 
-    for (const neighbor of neighbors) {
-      if (neighbor === personB) {
-        return distance + 1;
-      }
+    return ancestors;
+  }
 
-      if (!visited.has(neighbor)) {
-        visited.add(neighbor);
-        queue.push([neighbor, distance + 1]);
+  const aAncestors: Map<string, number> = getAncestors(personA);
+  const bAncestors: Map<string, number> = getAncestors(personB);
+
+  let minDistance = -1;
+
+  for (const [ancestor, aDist] of aAncestors) {
+    if (bAncestors.has(ancestor)) {
+      const bDist = bAncestors.get(ancestor)!;
+      const totalDistance = aDist + bDist;
+      if (minDistance === -1 || totalDistance < minDistance) {
+        minDistance = totalDistance;
       }
     }
   }
 
-  return -1;
+  return minDistance;
 }
