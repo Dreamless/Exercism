@@ -47,6 +47,36 @@ export class Board {
     while (queue.length > 0) {
       const [row, col] = queue.shift()!;
 
+      if ((player === 'X' && col === this.width - 1) || (player === 'O' && row === this.height - 1)) {
+        return true;
+      }
+
+      const neighbors: [number, number][] = [
+        [row, col - 1],
+        [row, col + 1],
+        [row - 1, col],
+        [row - 1, col + 1],
+        [row + 1, col],
+        [row + 1, col - 1],
+      ];
+
+      for (const [newRow, newCol] of neighbors) {
+        const key = `${newRow},${newCol}`;
+        if (
+          this.isValid(newRow, newCol) &&
+          !visited.has(key) &&
+          this.grid[newRow][newCol] === player
+        ) {
+          visited.add(key);
+          queue.push([newRow, newCol]);
+        }
+      }
     }
+
+    return false;
+  }
+
+  private isValid(r: number, c: number): boolean {
+    return r >= 0 && r < this.height && c >= 0 && c < this.width;
   }
 }
