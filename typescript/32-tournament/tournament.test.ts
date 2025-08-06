@@ -207,9 +207,27 @@ describe('Tournament', () => {
 
     expect(new Tournament().tally(matches.join('\n'))).toBe(
       [
-        'Team                                                                        | MP |  W |  D |  L |  P',
-        `My very long team name geez I wonder what would happen with my table layout | 105 | 105 |  0 |  0 | 315`,
-        `Short Team                                                                  | 105 |  0 |  0 | 105 |  0`,
+        `Team                                                                        |  MP |   W |   D |   L |   P`,
+        `My very long team name geez I wonder what would happen with my table layout | 105 | 105 |   0 |   0 | 315`,
+        `Short Team                                                                  | 105 |   0 |   0 | 105 |   0`,
+      ].join('\n')
+    )
+  })
+
+  it('large number of matches between two teams', () => {
+    const matches = []
+    const longTeamName = 'Fingers of feasts'
+    const shortTeamName = 'Short Team'
+
+    for (let i = 0; i < 1005; i++) {
+      matches.push(`${longTeamName};${shortTeamName};win`)
+    }
+
+    expect(new Tournament().tally(matches.join('\n'))).toBe(
+      [
+        `Team                           |   MP |    W |    D |    L |    P`,
+        `Fingers of feasts              | 1005 | 1005 |    0 |    0 | 3015`,
+        `Short Team                     | 1005 |    0 |    0 | 1005 |    0`,
       ].join('\n')
     )
   })

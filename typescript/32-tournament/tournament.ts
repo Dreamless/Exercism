@@ -62,17 +62,29 @@ export class Tournament {
       ...teams.map(([team]) => team.length)
     );
 
-    const header = `${'Team'.padEnd(maxTeamNameLength)} | MP |  W |  D |  L |  P`;
+    function colWithPad(col: string): string {
+      const digitsCount = (n: number): number => {
+        const minPad = 2;
+        if (n === 0) return minPad;
+        const count: number = Math.floor(Math.log10(Math.abs(n))) + 1;
+        return Math.max(minPad, count);
+      }
+
+      const padStartCount: number = digitsCount(matches.length);
+      return col.padStart(padStartCount)
+    }
+
+    const header = `${'Team'.padEnd(maxTeamNameLength)} | ${colWithPad('MP')} | ${colWithPad('W')} | ${colWithPad('D')} | ${colWithPad('L')} | ${colWithPad('P')}`;
 
     const result: string[] = [header];
 
     for (const [team, stat] of teams) {
       const teamName = team.padEnd(maxTeamNameLength);
-      const mp = stat.MP.toString().padStart(2);
-      const w = stat.W.toString().padStart(2);
-      const d = stat.D.toString().padStart(2);
-      const l = stat.L.toString().padStart(2);
-      const p = stat.P.toString().padStart(2);
+      const mp = colWithPad(stat.MP.toString());
+      const w = colWithPad(stat.W.toString());
+      const d = colWithPad(stat.D.toString());
+      const l = colWithPad(stat.L.toString());
+      const p = colWithPad(stat.P.toString());
       const row = `${teamName} | ${mp} | ${w} | ${d} | ${l} | ${p}`;
       result.push(row);
     }
