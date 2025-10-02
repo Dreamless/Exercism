@@ -18,24 +18,24 @@ export type AminoAcid =
   | "Tryptophan"
   | "STOP";
 
-export type CodonMap = Record<AminoAcid, Codon[]>;
+export type CodonMap = Map<AminoAcid, Codon[]>;
 
-export function translate(rna: string = ""): string[] {
-  const groupedCodonTable: CodonMap = {
-    Methionine: ["AUG"],
-    Phenylalanine: ["UUU", "UUC"],
-    Leucine: ["UUA", "UUG"],
-    Serine: ["UCU", "UCC", "UCA", "UCG"],
-    Tyrosine: ["UAU", "UAC"],
-    Cysteine: ["UGU", "UGC"],
-    Tryptophan: ["UGG"],
-    STOP: ["UAA", "UAG", "UGA"],
-  };
+export function translate(rna: string): string[] {
+  const groupedCodonTable: CodonMap = new Map([
+    ["Methionine", ["AUG"]],
+    ["Phenylalanine", ["UUU", "UUC"]],
+    ["Leucine", ["UUA", "UUG"]],
+    ["Serine", ["UCU", "UCC", "UCA", "UCG"]],
+    ["Tyrosine", ["UAU", "UAC"]],
+    ["Cysteine", ["UGU", "UGC"]],
+    ["Tryptophan", ["UGG"]],
+    ["STOP", ["UAA", "UAG", "UGA"]],
+  ]);
 
-  const codonTable: Record<string, AminoAcid> = {};
-  for (const [aminoAcid, codons] of Object.entries(groupedCodonTable)) {
+  const codonTable = new Map<Codon, AminoAcid>;
+  for (const [aminoAcid, codons] of groupedCodonTable) {
     for (const codon of codons) {
-      codonTable[codon] = aminoAcid as AminoAcid;
+      codonTable.set(codon, aminoAcid)
     }
   }
 
@@ -43,7 +43,7 @@ export function translate(rna: string = ""): string[] {
 
   for (let i = 0; i < rna.length; i += 3) {
     const codon = rna.slice(i, i + 3);
-    const aminoAcid = codonTable[codon];
+    const aminoAcid = codonTable.get(codon as Codon);
 
     if (codon.length < 3 || !aminoAcid) {
       throw new Error('Invalid codon');
