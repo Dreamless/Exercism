@@ -1,21 +1,11 @@
 export type SaddlePoint = { row: number; column: number };
 
 export function saddlePoints(grid: number[][]): SaddlePoint[] {
+  if (grid.length === 0 || grid[0].length === 0) return [];
+
   const rows = grid.length;
   const cols = grid[0].length;
-
   const result: SaddlePoint[] = [];
-
-  const rowMax = new Array<number>(rows);
-  for (let r = 0; r < rows; r++) {
-    let maxVal = grid[r][0];
-    for (let c = 1; c < cols; c++) {
-      if (grid[r][c] > maxVal) {
-        maxVal = grid[r][c];
-      }
-    }
-    rowMax[r] = maxVal;
-  }
 
   const colMin = new Array<number>(cols);
   for (let c = 0; c < cols; c++) {
@@ -29,9 +19,10 @@ export function saddlePoints(grid: number[][]): SaddlePoint[] {
   }
 
   for (let r = 0; r < rows; r++) {
+    const row: number[] = grid[r];
+    const maxInRow = Math.max(...row);
     for (let c = 0; c < cols; c++) {
-      const val = grid[r][c];
-      if (val === rowMax[r] && val === colMin[c]) {
+      if (row[c] === maxInRow && row[c] === colMin[c]) {
         result.push({ row: r + 1, column: c + 1 });
       }
     }
