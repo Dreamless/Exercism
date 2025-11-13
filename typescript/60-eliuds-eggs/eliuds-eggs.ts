@@ -3,11 +3,7 @@ export function eggCount(displayValue: number): number {
   let n = displayValue;
 
   while (n > 0) {
-    if (n & 1) {
-      count += 1;
-    } else {
-      count += 0;
-    }
+    count += n & 1;
     n >>>= 1;
   }
 
