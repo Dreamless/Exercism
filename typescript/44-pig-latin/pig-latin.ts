@@ -1,5 +1,5 @@
 export function translate(phrase: string): string {
-  const vowelRegex = /^(?:[aeiou]|xr|yt)/;
+  const vowelRegex = /^[aeiou]|xr|yt/;
   const replaceRegex = /^([^aeiou]*qu|[^aeiouy]+|y)(.*)/;
   return phrase
     .split(' ')
