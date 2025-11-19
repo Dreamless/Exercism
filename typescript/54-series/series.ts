@@ -6,16 +6,16 @@ export class Series {
       throw new Error('Input must contain only digits');
     }
 
+    if (input.length === 0) {
+      throw new Error('series cannot be empty');
+    }
+
     this.digits = input;
   }
 
   slices(length: number): number[][] {
     if (length === 0) {
       throw new Error('slice length cannot be zero');
-    }
-
-    if (this.digits.length === 0) {
-      throw new Error('series cannot be empty');
     }
 
     if (length < 0) {
