@@ -37,11 +37,7 @@ export class GameOfLife {
 
         const cell = this.grid[r][c]
 
-        if (cell === 1) {
-          next[r][c] = (aliveNeighbors === 2 || aliveNeighbors === 3) ? 1 : 0
-        } else {
-          next[r][c] = (aliveNeighbors === 3) ? 1 : 0
-        }
+        next[r][c] = (aliveNeighbors === 3 || (aliveNeighbors === 2 && cell === 1)) ? 1 : 0;
       }
     }
 
