@@ -15,9 +15,10 @@ export class Anagram {
     const arr: string[] = [];
 
     for (const str of potentials) {
+      const lowCaseStr = str.toLowerCase();
       if (
-        this.sortStr(str.toLowerCase()) === this.sortedTarget &&
-        str.toLowerCase() !== this.target
+        this.sortStr(lowCaseStr) === this.sortedTarget &&
+        lowCaseStr !== this.target
       ) {
         arr.push(str);
       }
