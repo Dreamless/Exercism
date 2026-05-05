@@ -1,4 +1,5 @@
 export type Card = string;
+export type CardValue = 0 | 1 | 2 | 3 | 4;
 
 export interface GameResult {
   status: 'finished' | 'loop';
@@ -6,30 +7,28 @@ export interface GameResult {
   tricks: number;
 }
 
-type Player = 'A' | 'B';
+const CARD_MAP: Record<string, CardValue> = {
+  'A': 4, 'K': 3, 'Q': 2, 'J': 1,
+  '10': 0, '9': 0, '8': 0, '7': 0, '6': 0, '5': 0, '4': 0, '3': 0, '2': 0
+};
 
 export const simulateGame = (
   playerA: Card[],
   playerB: Card[]
 ): GameResult => {
-  const deckA: Card[] = [...playerA];
-  const deckB: Card[] = [...playerB];
-  let items: Card[] = [];
+  const deckA: CardValue[] = playerA.map(c => CARD_MAP[c]);
+  const deckB: CardValue[] = playerB.map(c => CARD_MAP[c]);
 
+  let items: CardValue[] = [];
   let tricks = 0;
   let cardsPlayed = 0;
 
-  let turn: Player = 'A';
+  let turn: 'A' | 'B' = 'A';
   let mode: 'normal' | 'penalty' = 'normal';
   let penaltyRemaining = 0;
-  let lastPlayer: Player | null = null;
+  let lastPlayer: 'A' | 'B' | null = null;
 
   const history = new Set<string>();
-
-  const getDeckState = (): string => {
-    const mask = (c: Card) => (['J', 'Q', 'K', 'A'].includes(c) ? c : 'N');
-    return deckA.map(mask).join('') + '|' + deckB.map(mask).join('');
-  };
 
   if (deckA.length === 0 || deckB.length === 0) {
     return { status: 'finished', cards: 0, tricks: 0 };
@@ -37,38 +36,32 @@ export const simulateGame = (
 
   while (true) {
     if (items.length === 0) {
-      const state = getDeckState();
+      const state = deckA.join('') + '|' + deckB.join('');
       if (history.has(state)) {
         return { status: 'loop', cards: cardsPlayed, tricks };
       }
       history.add(state);
     }
 
-    const activeDeck: string[] = turn === 'A' ? deckA : deckB;
+    const activeDeck: CardValue[] = turn === 'A' ? deckA : deckB;
 
     if (activeDeck.length === 0) {
-      const winningDeck = turn === 'A' ? deckB : deckA;
-      winningDeck.push(...items);
-      items = [];
+      if (lastPlayer === 'A') {
+        deckA.push(...items);
+      } else {
+        deckB.push(...items);
+      }
       tricks++;
       return { status: 'finished', cards: cardsPlayed, tricks };
     }
 
-    const card = activeDeck.shift()!;
+    const card: CardValue = activeDeck.shift()!;
     items.push(card);
     cardsPlayed++;
 
-    let isPayment = false;
-    let penaltyVal = 0;
-
-    if (card === 'J') { isPayment = true; penaltyVal = 1; }
-    else if (card === 'Q') { isPayment = true; penaltyVal = 2; }
-    else if (card === 'K') { isPayment = true; penaltyVal = 3; }
-    else if (card === 'A') { isPayment = true; penaltyVal = 4; }
-
-    if (isPayment) {
+    if (card > 0) {
       mode = 'penalty';
-      penaltyRemaining = penaltyVal;
+      penaltyRemaining = card;
       lastPlayer = turn;
       turn = turn === 'A' ? 'B' : 'A';
     } else {
@@ -77,9 +70,11 @@ export const simulateGame = (
       } else {
         penaltyRemaining--;
         if (penaltyRemaining === 0) {
-          const collectingDeck: string[] = lastPlayer === 'A' ? deckA : deckB;
-
-          collectingDeck.push(...items);
+          if (lastPlayer === 'A') {
+            deckA.push(...items);
+          } else {
+            deckB.push(...items);
+          }
           items = [];
           tricks++;
 
