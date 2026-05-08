@@ -46,11 +46,9 @@ export const simulateGame = (
     const activeDeck: CardValue[] = turn === 'A' ? deckA : deckB;
 
     if (activeDeck.length === 0) {
-      if (lastPlayer === 'A') {
-        deckA.push(...items);
-      } else {
-        deckB.push(...items);
-      }
+      const deck: CardValue[] = lastPlayer === 'A' ? deckA : deckB;
+      deck.push(...items);
+
       tricks++;
       return { status: 'finished', cards: cardsPlayed, tricks };
     }
@@ -70,11 +68,9 @@ export const simulateGame = (
       } else {
         penaltyRemaining--;
         if (penaltyRemaining === 0) {
-          if (lastPlayer === 'A') {
-            deckA.push(...items);
-          } else {
-            deckB.push(...items);
-          }
+          const deck: CardValue[] = lastPlayer === 'A' ? deckA : deckB;
+          deck.push(...items);
+
           items = [];
           tricks++;
 
